@@ -80,7 +80,7 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res
 });
 
 io.on('connection', (socket) => {
-  console.log('Un élève s\'est connecté');
+
 
   socket.on("login", () => {
     let srvSockets = io.sockets.sockets;
@@ -100,11 +100,21 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     io.emit('new-message', 'Serveur : Utilisateur ' + socket.handshake.session.username + ' vient de se déconnecter');
-    console.log('Un élève s\'est déconnecté');
+
   });
+
+/*** ______________________________ Redirection ______________________________ ***/
+
+socket.on("Redirection",(data) =>
+{
+  socket.emit("Redirection2", data);
 });
 
-http.listen(4200, () => {
-  console.log('Serveur lancé sur le port 4200, http://localhost:4200');
+});
+
+
+
+http.listen(4201, () => {
+  console.log('Serveur lancé sur le port 4200, http://localhost:4201');
 });
 

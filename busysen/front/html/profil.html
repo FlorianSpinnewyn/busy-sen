@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Busy'sen</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="../css/profil.css">
+    </head>
+    <body>
+  
+    <!-- Menu -->
+    <div class="w3-top">
+        <div class="w3-row w3-large">
+          <div class="w3-col s4">
+            <button id="GoHome" class="w3-block btn">Home</button>
+          </div>
+          <div class="w3-col s4">
+            <button id="GoReservation" class="w3-block btn">My Reservation</button>
+          </div>
+          <div class="w3-col s3">
+            <button id="GoProfil" class="w3-block btn active">Profil</button>
+          </div>
+          <div class="w3-col s1">
+            <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+          </div>
+        </div>
+    </div>
+      
+      <div class="w3-row-padding" id="about">
+        <div class="w3-center w3-padding-64">
+          <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Profil</span>
+        </div>
+    </div>
+
+    <div class="w3-row">
+      <div class="w3-col s5" style="padding-left:5rem;padding-right:5rem;">
+        <div class="w3-card-4">
+          <div class="w3-container">
+           
+            <h3> <i class="fa fa-user-o fa-5x" style="margin:1rem 3rem;" aria-hidden="true"></i>Jane Doe</h3>
+            <p class="w3-opacity">Cir 3</p>
+            <p>Eleve de Cir 3 Promo 65</p>
+            <p><button class="w3-button w3-light-grey w3-block">Contact</button></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-card-4 w3-margin-bottom w3-col s6 ">
+        <ul class="w3-ul w3-border w3-center">
+          <li class="w3-black w3-xlarge w3-padding-32" style="color:#0EDCBD;">History</li>
+          <li class="w3-padding-16">Salle<b> 1</b> -----> De <b>8h</b> a <b>10h</b> </li>
+          <li class="w3-padding-16"><b>10</b> Emails</li>
+          <li class="w3-padding-16"><b>10</b> Domains</li>
+          <li class="w3-padding-16"><b>Endless</b> Support</li>
+          <li class="w3-padding-16">
+            <h2 class="w3-wide">$ 10</h2>
+            <span class="w3-opacity">per month</span>
+          </li>
+         
+        </ul>
+      </div>
+    </div>
+</body>
+    <script>
+        let socket = io();
+    </script>
+    <script src="../js/modules/logger.js"></script>
+    <script src="../js/profil.js"></script>
+</html>
