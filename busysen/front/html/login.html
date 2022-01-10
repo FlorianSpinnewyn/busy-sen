@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <title>CIR 2 Test Chat</title>
-</head>
-
-<body>
-    <p>Login</p>
-    <form id="loginForm" action="">
-        <input id="email" autocomplete="off" placeholder="email" type="text" />
-        <input id="mdp" autocomplete="off" placeholder="password" type="password" />
-        <input type="submit" value="Login" />
-        <a href="/register">Inscription</a>
-
-
-    </form>
-</body>
-<script src="../js/login/loggerLogin.js"></script>
-<script src="../js/login/login.js"></script>
-
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <title>CIR 2 Test Chat</title>
+    </head>
+    <body>
+        <h1>Veuillez saisir un nom d'utilisateur : </h1>
+        <form id="loginForm" action="">
+            <input id="username" autocomplete="off" placeholder="Username" />
+            <input id="mp" autocomplete="off" placeholder="Mp" />
+            <input type="submit" value="Se connecter!"/>
+            <button onclick="window.location.href='/register'">register</button>
+        </form>
+    </body>
+    <script src="../js/modules/logger.js"></script>
+    <script src="../js/login.js"></script>
 </html>
