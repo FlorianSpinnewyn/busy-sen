@@ -50,12 +50,6 @@ if (app.get('env') === 'production') {
 app.get('/', (req, res) => {
   let sessionData = req.session;
 
-  // Test des modules 
-  states.printServerStatus();
-  states.printProfStatus();
-  let test = new Theoden();
-  
-  // Si l'utilisateur n'est pas connecté
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
   } else {
@@ -63,45 +57,48 @@ app.get('/', (req, res) => {
   }
 });
 
-app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res) => {
-  const login = req.body.login
+app.get('/login', (req, res) => {
+  let sessionData = req.session;
 
-  // Error management
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    console.log(errors);
-    //return res.status(400).json({ errors: errors.array() });
+  if (!sessionData.username) {
+    res.sendFile(__dirname + '/front/html/login.html');
   } else {
-    // Store login
-    req.session.username = login;
-    req.session.save()
-    res.redirect('/');
+    res.sendFile(__dirname + '/front/html/index.html');
   }
 });
+
+app.get('/register', (req, res) => {
+  let sessionData = req.session;
+  if (!sessionData.username) {
+    res.sendFile(__dirname + '/front/html/register.html');
+  } else {
+    res.sendFile(__dirname + '/front/html/index.html');
+  }
+});
+
+app.post('/login', urlencodedParser, (req, res) => {
+
+  const login = req.body.login;
+  const mdp = req.body.mdp;
+  //REQUETE VERIF COMPTE BDD
+
+  console.log(login, mdp);
+  
+});
+
+app.post('/register', urlencodedParser, (req, res) => {
+  //Récupération des données
+  const login = req.body.login;
+  const mdp = req.body.mdp;
+
+  //REQUETE INSERTION BDD USER
+  console.log(login,mdp);
+});
+
 
 io.on('connection', (socket) => {
   console.log('Un élève s\'est connecté');
 
-  socket.on("login", () => {
-    let srvSockets = io.sockets.sockets;
-    srvSockets.forEach(user => {
-      console.log(user.handshake.session.username);
-    });
-    io.emit('new-message', 'Utilisateur ' + socket.handshake.session.username + ' vient de se connecter');
-  });
-
-  socket.on('message', (msg) => {
-    console.log('message: ' + msg);
-    //Envoie le message pour tous!
-    io.emit('new-message', socket.handshake.session.username + ' : ' + msg);
-    //Autre alternative : envoyer le message à tous les autres socket ormis celui qui envoie
-    //socket.broadcast.emit('new-message', msg);
-  });
-
-  socket.on('disconnect', () => {
-    io.emit('new-message', 'Serveur : Utilisateur ' + socket.handshake.session.username + ' vient de se déconnecter');
-    console.log('Un élève s\'est déconnecté');
-  });
 });
 
 http.listen(4200, () => {
