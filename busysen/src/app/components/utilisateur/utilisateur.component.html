@@ -1,15 +1,30 @@
-<div>
-    <p>Login</p>
+<div class="card">
+    <div class="card-header text-white bg-info">
+        Se Connecter
+    </div>
+    <div class="card-body">
+        <form> 
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <input type="text" class="form-control" placeholder="mail" name="emailUser">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <input type="password" class="form-control" placeholder="password" name="passwordUser">
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button class="btn btn-info" type="submit">
+                    Connection
+                </button>
+            </div>
+            <div class="text-right">
+                <a class="btn btn-info" href="../inscription">
+                    Inscription
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
-
-<form id="loginForm" action="">
-    <input type="text" placeholder="mail" id="mail" required />
-    <input type="password" placeholder="mdp" id="mdp" required />
-    <input class="bg-primary connexion" type="submit" value="Connexion" id="envoie" />
-
-    <a class="bg-primary fakeBtn register" href="./inscription">Inscription</a>
-</form>
-
-<footer>©2022 Busy'sen</footer>
-
-<script src="login.js"></script>
