@@ -1,0 +1,124 @@
+const express = require("express");
+const app = express();
+const bodyParser = require('body-parser');
+const urlencodedparser = bodyParser.urlencoded({ extended: false });
+const sharedsession = require("express-socket.io-session");
+const { body, validationResult } = require('express-validator');
+const {MongoClient} = require('mongodb');
+const bcrypt = require('bcrypt');
+
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+const hostname = '127.0.0.1';
+const port = 3000;
+
+const session = require("express-session")({
+    // CIR2-chat encode in sha256
+    secret: "eb8fcc253281389225b4f7872f2336918ddc7f689e1fc41b64d5c4f378cdc438",
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 2 * 60 * 60 * 1000,
+        secure: false
+    }
+});
+
+app.use(express.static(__dirname + '/front/'));
+app.use(urlencodedparser);
+app.use(session);
+
+
+
+http.listen(port, hostname, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+async function main() {
+    // we'll add code here soon
+    const uri = "mongodb+srv://admin:12345@cluster0.r7qlx.mongodb.net/test?retryWrites=true&w=majority"
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        console.log(client)
+        await listDatabases(client);
+        await getLevelData(client,3)
+    } catch (e) {
+        console.error(e);
+    }
+    finally {
+        await client.close();
+    }
+}
+
+main().catch(console.error);
+
+async function listDatabases(client){
+    databasesList = await client.db().admin().listDatabases();
+
+    console.log("Databases:");
+    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+};
+
+async function getLevelData(client, level){
+    const date = Date.now()
+    const room = [];
+    const result =  await client.db("Projet-Info").collection("Rooms").find({level:level});
+    for(let i of result){
+        let occupied = false;
+        for(let j of i.reservations){
+            if(j.start <= date && j.end >= date) {
+                occupied = true;
+                break;
+            }
+        }
+        if(!occupied) room.push(i.index)
+    }
+    return room;
+}
+
+
+async function getDataRoom(client, roomNumber){
+    return await client.db("Projet-Info").collection("Rooms").findOne({ number:roomNumber});
+}
+
+async function newReservation(client, data){
+    /*
+    data : {
+    number : "C956",
+    reservation : {
+        start: 12345,
+        end : 54321,
+        id:(ou email jsp encore)
+    }
+    */
+    const roomData = await client.db("Projet-Info").collection("Rooms").findOne({ number: data.number});
+    roomData.reservations.push(data);
+
+    const result  = await client.db("Projet-Info").collection("Rooms").updateOne({number:data.number},{$set:roomData})
+
+
+}
+
+async function removeReservation(client, id){
+
+}
+
+async function signIn(client,data){
+    const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
+    const match = await bcrypt.compare(data.password, user.password);
+
+    if(!match) return -1;
+    //se loger
+    return 0;
+}
+
+async function signUp(client,data){
+    data.password = await bcrypt.hash(data.password,10);
+    const result = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
+    if(result) return -1;
+    await client.db("Projet-Info").collection("Users").insertOne(data);
+    //se loger
+    return 0;
+}
+
