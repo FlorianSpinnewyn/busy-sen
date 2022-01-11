@@ -10,7 +10,10 @@ let registter = (function(){
                 passorwd: mp
             },
             success: () => {
+                //IF FONCTION ELLIOT TRUE ALORS
                 window.location.href = "/index";
+                //ELSE
+                //REDIRECT ./REGISTER + message erreur
             },
         });
     }

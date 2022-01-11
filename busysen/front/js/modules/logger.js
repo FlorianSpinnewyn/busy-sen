@@ -10,7 +10,10 @@ let logger = (function(){
                 passorwd: mp
             },
             success: () => {
+                //IF FONCTION ELLIOT TRUE ALORS
                 window.location.href = "/index";
+                //ELSE
+                //REDIRECT ./LOGIN + message erreur
             },
         });
     }

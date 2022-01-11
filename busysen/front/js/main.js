@@ -1,16 +1,12 @@
-console.log("llzefdze")
 // Avertis socket io de l'arrivée dans le chat d'un user
 socket.emit('login', '');
 
-
-
-
 // Redirection
 document.getElementById("GoProfil").addEventListener("click", event => {
-    socket.emit("Redirection","../html/profil.html", false);
+    socket.emit("Redirection","/profil", false);
 });
 document.getElementById("GoReservation").addEventListener("click", event => {
-  socket.emit("Redirection","../html/reservation.html", false);
+  socket.emit("Redirection","/reservation", false);
 });
 
 socket.on("Redirection2", data => {

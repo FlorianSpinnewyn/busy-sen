@@ -1,9 +1,9 @@
 // Redirection
 document.getElementById("GoHome").addEventListener("click", event => {
-    socket.emit("Redirection","../html/index.html", false);
+    socket.emit("Redirection","/index", false);
 });
 document.getElementById("GoReservation").addEventListener("click", event => {
-    socket.emit("Redirection","../html/reservation.html", false);
+    socket.emit("Redirection","/reservation", false);
 });
 
 socket.on("Redirection2", data => {

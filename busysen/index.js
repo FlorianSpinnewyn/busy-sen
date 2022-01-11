@@ -83,6 +83,24 @@ app.get('/index', body('register').isLength({ min: 3 }).trim().escape(), (req, r
   }
 });
 
+app.get('/reservation', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+  let sessionData = req.session;
+  if (!sessionData.username) {
+    res.sendFile(__dirname + '/front/html/login.html');
+  } else {
+    res.sendFile(__dirname + '/front/html/reservation.html');
+  }
+});
+
+app.get('/profil', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+  let sessionData = req.session;
+  if (!sessionData.username) {
+    res.sendFile(__dirname + '/front/html/login.html');
+  } else {
+    res.sendFile(__dirname + '/front/html/profil.html');
+  }
+});
+
 
 app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res) => {
   const login = req.body.login
