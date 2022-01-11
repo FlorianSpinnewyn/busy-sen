@@ -254,15 +254,14 @@ async function removeReservation(client, idRoom,idReservations){
 }
 
 async function signIn(client,data){
-  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
-  const match = await bcrypt.compare(data.password, user.password);
-  if(!match) return -1;
+  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email,password:data.passorwd});
+  //const match = await bcrypt.compare(data.password, user.password);
+  if(!user) return -1;
   //se loger
   return 0;
 }
 
 async function signUp(client,data){
-  data.password = await bcrypt.hash(data.password,10);
   const result = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
   if(result) return -1;
   await client.db("Projet-Info").collection("Users").insertOne(data);
