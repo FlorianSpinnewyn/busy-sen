@@ -137,6 +137,14 @@ app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (re
 
 io.on('connection', (socket) => {
 
+  socket.on("login", () => {
+    console.log("Etudiant connecté")
+  });
+
+  socket.on("Redirection",(data) => {
+    socket.emit("Redirection2", data);
+  });
+
 });
 
 http.listen(4201, () => {

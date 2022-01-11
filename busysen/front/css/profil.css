@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    padding-bottom: 3rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+/*Menu*/
+.btn{
+  background-color: black;
+  color:white;
+  border-style: none;
+  padding:0.5rem;
+}
+
+.btn:hover{
+  color:#0EDCBD;
+}
+
+.btn.active{
+  color:#0EDCBD;
+}

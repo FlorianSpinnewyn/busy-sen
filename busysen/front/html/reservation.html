@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Busy'sen</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="../css/reservation.css">
+    </head>
+    <body>
+  
+    <!-- Menu -->
+    <div class="w3-top">
+        <div class="w3-row w3-large">
+          <div class="w3-col s4">
+            <button id="GoHome" class="w3-block btn">Home</button>
+          </div>
+          <div class="w3-col s4">
+            <button id="GoReservation" class="w3-block btn active">My Reservation</button>
+          </div>
+          <div class="w3-col s3">
+            <button id="GoProfil" class="w3-block btn">Profil</button>
+          </div>
+          <div class="w3-col s1">
+            <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+          </div>
+        </div>
+    </div>
+      
+      <div class="w3-row-padding" id="about">
+        <div class="w3-center w3-padding-64">
+          <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">My Reservation</span>
+        </div>
+    </div>
+
+</body>
+    <script>
+        let socket = io();
+    </script>
+    <script src="../js/modules/logger.js"></script>
+    <script src="../js/reservation.js"></script>
+</html>
