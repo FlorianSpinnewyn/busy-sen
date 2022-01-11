@@ -9,3 +9,8 @@ document.getElementById("GoReservation").addEventListener("click", event => {
 socket.on("Redirection2", data => {
   document.location.href=data; 
 });
+
+document.getElementById("logOut").addEventListener("click", e => {
+  e.preventDefault();
+  window.location.href="/login";
+});

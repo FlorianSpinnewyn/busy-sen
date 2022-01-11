@@ -19,5 +19,5 @@ socket.on("Redirection2", data => {
 
 document.getElementById("logOut").addEventListener("click", e => {
     e.preventDefault();
-    window.location.href("./login");
+    window.location.href="/login";
 });
