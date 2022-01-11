@@ -105,14 +105,12 @@ io.on('connection', (socket) => {
 
 /*** ______________________________ Redirection ______________________________ ***/
 
-socket.on("Redirection",(data) =>
-{
-  socket.emit("Redirection2", data);
-});
+  socket.on("Redirection",(data) =>
+  {
+    socket.emit("Redirection2", data);
+  });
 
 });
-
-
 
 http.listen(4201, () => {
   console.log('Serveur lancé sur le port 4200, http://localhost:4201');

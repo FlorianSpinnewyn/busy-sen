@@ -5,16 +5,87 @@ body {
 }
 /*Menu*/
 .btn{
-  background-color: black;
-  color:white;
+  background-color: #363636;
+  color:rgb(255, 255, 255);
   border-style: none;
-  padding:0.5rem;
+  padding:0.7rem;
 }
 
 .btn:hover{
-  color:#0EDCBD;
+  font-weight: bold;
+  color: #E44747;
+}
+.btn2:hover{
+  font-size: 1.4rem;;
 }
 
 .btn.active{
-  color:#0EDCBD;
+  color: #E44747;
+  font-weight: bold;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color:#363636;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 115%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+th{
+  background-color: #585858;
+  border: 2px solid #585858;
+}
+td, th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+}
+.horaire{
+  text-align : center;
+  width:20%;
+}  
+.dateDay{
+  width:100%;
+  text-align:center;
+  font-weight: bold;
+  color: white;
+  background-color: #E44747;
+}
+
+.infos{
+  background-color: #F5BABA;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
 }
