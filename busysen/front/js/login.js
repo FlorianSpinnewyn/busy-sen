@@ -8,3 +8,4 @@ form.addEventListener('submit', event => {
     event.preventDefault();
     logger.sendLogin(input.value,inputMp.value);
 });
+
