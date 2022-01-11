@@ -13,7 +13,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
 const hostname = '127.0.0.1';
-const port = 3000;
+const port = 3002;
 
 const session = require("express-session")({
     // CIR2-chat encode in sha256
@@ -41,20 +41,22 @@ async function main() {
     const uri = "mongodb+srv://admin:12345@cluster0.r7qlx.mongodb.net/test?retryWrites=true&w=majority"
     const client = new MongoClient(uri);
     try {
+
         await client.connect();
-        console.log(client)
+
         await listDatabases(client);
-        await newReservation(client,{
+        //await signUp(client,{email:"fds",password:"fdns"})
+        /*await newReservation(client,{
             name : "C401",
             reservations : {
                 start: 12345,
                 end : 54321,
                 idClient: "fnjdjnfsd",
                 _id: new BSON.ObjectId()
-        }})
+        }})*/
         //console.log(await getLevelData(client,"1"))
-        //console.log(await getDataUser(client,"fnjdjnfsd"))
-
+        await getDataUser(client,"fnjdjnfsd")
+        await removeReservation(client,"C401")
     } catch (e) {
         console.error(e);
     }
@@ -95,12 +97,17 @@ async function getLevelData(client, level){
 }
 
 async function getDataUser(client,idClient){
+    //faire un filter sur les salles
     const cursor = await client.db("Projet-Info").collection("Rooms").find({'reservations.idClient': idClient});
-    return await cursor.toArray();
+    if(!cursor) return -1;
+    const arrayRoom = await cursor.toArray();
+
+    arrayRoom.forEach(obj=>obj.reservations = obj.reservations.filter(e=>e.idClient==idClient));
+    console.log(arrayRoom)
 }
 
 async function getDataRoom(client, roomNumber){
-    return await client.db("Projet-Info").collection("Rooms").findOne({ number:roomNumber});
+    return await client.db("Projet-Info").collection("Rooms").findOne({ name:roomNumber});
 }
 
 async function newReservation(client, data){
@@ -114,16 +121,14 @@ async function newReservation(client, data){
     }
     */
     const roomData = await client.db("Projet-Info").collection("Rooms").findOne({ name: data.name});
-    console.log(roomData)
     roomData.reservations.push(data.reservations);
-    console.log(roomData)
     if(!roomData) return -1;
     const result  = await client.db("Projet-Info").collection("Rooms").updateOne({number:data.number},{$set:roomData})
     return 0;
 }
 
-async function removeReservation(client, idRoom,idReservations){
-    //const result = await client.db("Projet-Info").collection("Rooms").update({ _id : idRoom },{$pull : {reservations: {_id:idReservations}})
+async function removeReservation(client, nameRoom,idReservations){
+    const result = await client.db("Projet-Info").collection("Rooms").updateOne({ name : nameRoom },{$pull : {reservations: {_id:new BSON.ObjectID(idReservations)}}})
 }
 
 async function signIn(client,data){
@@ -143,3 +148,6 @@ async function signUp(client,data){
     return 0;
 }
 
+async function filterData(client,data){
+    //doesn't work yet
+}
