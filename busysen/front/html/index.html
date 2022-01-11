@@ -48,12 +48,23 @@
                 </span>
               </div>
             </div>
+
+            <div style="float:right;">
+              <button id="niveauPlus" class="fa fa-arrow-up"></button> <br>
+              <span>Niveau 1</span> <br>
+              <button id="niveauMoins" class="fa fa-arrow-down"></button>
+            </div>
           
               <!-- Slide bar -->
               <br><br><br>
               <div class="slidecontainer">
                 <input type="range" min="8" max="22" value="50" class="slider" id="myRange">
                 <p>Heure: <span id="demo"></span></p>
+              </div>
+              <div>
+                <button id="dateMoins" class="fa fa-arrow-left"></button>
+                <span>Mardi 11 Janvier</span>
+                <button id="datePlus" class="fa fa-arrow-right"></button>
               </div>
               
               <script>
@@ -65,8 +76,8 @@
                 output.innerHTML = this.value+ "h";
               }
               </script>
-              
-            </div>
+
+          </div>
 
             <div id="emploie" class="fenetre" hidden>
               <div class="w3-card-4 w3-margin-bottom " style="background-color:#ffffff;">
