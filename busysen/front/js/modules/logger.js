@@ -7,7 +7,7 @@ let logger = (function(){
             url: "/login/",
             data: {
                 login: username,
-                passorwd: mp
+                password: mp
             },
             success: () => {
                 //IF FONCTION ELLIOT TRUE ALORS

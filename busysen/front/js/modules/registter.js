@@ -7,7 +7,7 @@ let registter = (function(){
             url: "/register/",
             data: {
                 login: username,
-                passorwd: mp
+                password: mp
             },
             success: () => {
                 //IF FONCTION ELLIOT TRUE ALORS

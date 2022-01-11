@@ -1,0 +1,9 @@
+.rect {
+		border:solid 3px green;
+}
+
+
+a { 
+	pointer-events: none; 
+	cursor: default; 
+	}

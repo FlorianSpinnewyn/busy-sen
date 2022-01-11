@@ -10,6 +10,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <link rel="stylesheet" href="../css/index.css">
+        <link rel="stylesheet" href="../css/style.css">
     </head>
  
     <body>
@@ -25,48 +26,83 @@
               <div class="w3-col s3">
                 <button id="GoProfil" class="w3-block btn">Profil</button>
               </div>
-              <div class="w3-col s1">
-                <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+              <div class="w3-col s1 tooltip">
+                <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out btn2" style="text-decoration:none;" aria-hidden="true"></i></button>
+                <span class="tooltiptext w3-small">Deconnection</span>
               </div>
             </div>
           </div>
 
-          <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
-
-            <div class="w3-row-padding" id="about">
+          <div class="w3-row-padding" id="about">
               <div class="w3-center w3-padding-64">
                 <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Classroom reservation</span>
               </div>
-            </div>
+          </div>
           
+          <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
             <div class="w3-container">
-              <div class="w3-display-container mySlides">
-                <img src="../images/plan.jpg" style="width:50%">
-               
+              <div class="w3-display-container mySlides" id="plan"></div>
+              <div class=" tooltip ">
+                <button id="option">Salle <span>1</span></button>
+                <span class="tooltiptext">
+                  <i class="fa fa-wifi" aria-hidden="true"></i> : <span id="wifi"></span> <br>
+                  <i class="fa fa-video-camera" aria-hidden="true"></i> : <span id="projector">oui</span>
+                </span>
               </div>
+            </div>
+
+            <div style="float:right;">
+              <button id="niveauPlus" class="fa fa-arrow-up"></button> <br>
+              <span>Niveau 1</span> <br>
+              <button id="niveauMoins" class="fa fa-arrow-down"></button>
             </div>
           
               <!-- Slide bar -->
+              <br><br><br>
               <div class="slidecontainer">
-                <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-                <p>Value: <span id="demo"></span></p>
+                <input type="range" min="8" max="22" value="50" class="slider" id="myRange">
+                <p>Heure: <span id="demo"></span></p>
+              </div>
+              <div>
+                <button id="dateMoins" class="fa fa-arrow-left"></button>
+                <span>Mardi 11 Janvier</span>
+                <button id="datePlus" class="fa fa-arrow-right"></button>
               </div>
               
               <script>
               var slider = document.getElementById("myRange");
               var output = document.getElementById("demo");
-              output.innerHTML = slider.value;
+              output.innerHTML = slider.value + "h";
               
               slider.oninput = function() {
-                output.innerHTML = this.value;
+                output.innerHTML = this.value+ "h";
               }
               </script>
-              
+
+          </div>
+
+            <div id="emploie" class="fenetre" hidden>
+              <div class="w3-card-4 w3-margin-bottom " style="background-color:#ffffff;">
+                <div style="float:right;">
+                  <button id="cancel"  name="cancel"style="background-color:#363636;color:white;margin:0;"><i class="fa fa-remove"></i></button>
+                </div>
+                <div classe="w3-card-4">
+                  <h1 style="background-color:#363636;color:white;margin:0;padding:1rem;">Emploi du temps</h1>
+                  <p>Salle reservée: <span>salle 1</span></p>
+                  <p>A quelle date voulez vous reserver?
+                    <input type="date" id="start" name="trip-start" min="2022-01-01" max="2022-12-31">
+                  </p>
+                  <p>A quelle heure voulez-vous reserver?
+                    <input type="time" id="appt" name="appt" min="09:00" max="18:00" required>  
+                  </p>
+                  <button type="submit" style="margin-left:64rem;margin-bottom:1rem;" id="buttonReservation">Reserver</button>
+                </div>
+              </div>
             </div>
 
             <!-- Footer -->
 
-<footer class="w3-container w3-padding-32 w3-light-grey w3-center">
+<footer class="w3-container w3-light-grey w3-center">
     <h4>Footer</h4>
     <a href="#" class="w3-button w3-black w3-margin"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
     <div class="w3-xlarge w3-section">
@@ -84,7 +120,13 @@
 
     <script>
         let socket = io();
+
+       
+
     </script>
+    <script src="../js/MapHighlight.js"></script>
+    <script src="../js/rooms.js"></script>
+    <script src="../js/functions.js"></script>
     <script src="../js/main.js"></script>
 
 </html>

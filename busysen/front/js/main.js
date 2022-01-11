@@ -17,3 +17,18 @@ document.getElementById("logOut").addEventListener("click", e => {
     e.preventDefault();
     window.location.href="/login";
 });
+
+document.getElementById('cancel').addEventListener("click", event => 
+{
+    document.getElementById('emploie').hidden=true;
+});
+
+document.getElementById('option').addEventListener("click", event => 
+{
+    document.getElementById('emploie').hidden=false;
+});
+
+
+//Creation de la page suivant l'étage
+let level = 1;
+addPlan(level)

@@ -25,8 +25,9 @@
           <div class="w3-col s3">
             <button id="GoProfil" class="w3-block btn">Profil</button>
           </div>
-          <div class="w3-col s1">
-            <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out" aria-hidden="true"></i></button>
+          <div class="w3-col s1 tooltip">
+            <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out btn2" style="text-decoration:none;" aria-hidden="true"></i></button>
+            <span class="tooltiptext w3-small">Deconnection</span>
           </div>
         </div>
     </div>
@@ -36,7 +37,14 @@
           <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">My Reservation</span>
         </div>
     </div>
-
+    <div class="w3-row-padding">
+      <div class="w3-center w3-margin">
+        <table class="w3-card-4" id="tabReservations">
+          <tbody id="tabBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
 </body>
     <script>
         let socket = io();
