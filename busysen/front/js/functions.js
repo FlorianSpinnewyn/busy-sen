@@ -1,10 +1,10 @@
-function addPlan(level) {
+function addPlan(level) { //ajout du plan et init des salle sur index
     let string = ""
  
     string = "<div><img src='../images/" + level + ".png' usemap='#image-map'> <map name='image-map'>";
 
     for(let i = 0; i<rooms[level].length;i++) {
-        string = string + "<area shape='rect' class='rect' href='#!' title='rect' alt='rect' coords='" + rooms[level][i][1] + "' shape='rect' id='" + rooms[level][i][0] + "'>";
+        string = string + "<area shape='rect' class='occuped' href='#!' title='rect' alt='rect' coords='" + rooms[level][i][1] + "' shape='rect' id='" + rooms[level][i][0] + "'>";
         console.log(rooms[level][i])
         
 
@@ -24,9 +24,27 @@ function addPlan(level) {
         var sheet = window.document.styleSheets[3];
         sheet.insertRule('#' + rooms[level][i][0] + ' { transform: rotate( ' + rooms[level][i][2] + 'deg); }', sheet.cssRules.length);
         document.getElementById(rooms[level][i][0]).addEventListener("click", e => {
-            alert("tu as cliqué sur la salle " + rooms[level][i][0])
+            document.getElementById('emploie').hidden=false;
+            document.getElementById('SelectRoom').innerHTML=rooms[level][i][0];
+            socket.emit("getDataRoom", rooms[level][i][0]);
         });
     }
 
 
-  }
+}
+
+function actuPlan(date, level) {
+    socket.emit("actuPlan", date, level);
+}
+
+function displayDate(date){
+    var nodeDate = document.getElementById("date");
+
+    let dateLocale = date.toLocaleString('fr-FR',{
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'});
+
+    nodeDate.innerHTML = dateLocale;
+}

@@ -152,7 +152,7 @@ app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (re
     //PRB ERREUR AU DESSUS ET PRB AWAIT EN DESSOUS !
 
     // Store login
-    const result = await signUp(client, {email: login, password: password});
+    //const result = await signUp(client, {email: login, password: password});
     if(result == -1){
       res.send('already_exist');
     }
@@ -173,6 +173,17 @@ io.on('connection', (socket) => {
 
   socket.on("Redirection", (data) => {
     socket.emit("Redirection2", data);
+  });
+
+  socket.on("actuPlan", async (date, level) => {
+    let tab = await getLevelData(client, level,date);
+    console.log(tab)
+    socket.emit("actuPlan2", tab);
+  });
+
+  socket.on("getDataRoom", (nameRoom) => {
+    let tab = getDataRoom(client, nameRoom);
+    socket.emit("getDataRoom2", tab,nameRoom);
   });
 
 });
@@ -215,15 +226,13 @@ async function listDatabases(client){
   databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
 
-async function getLevelData(client, level){
-  const date = Date.now()
-  console.log(date)
+async function getLevelData(client, level, date){
   const room = [];
   const cursor =  await client.db("Projet-Info").collection("Rooms").find({level:level});
   const result  = await cursor.toArray();
-
   for(let i of result){
       let occupied = false;
+      console.log("test")
       for(let j of i.reservations){
           console.log("test")
           console.log(i)

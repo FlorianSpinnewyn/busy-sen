@@ -65,7 +65,7 @@
               </div>
               <div>
                 <button id="dateMoins" class="fa fa-arrow-left"></button>
-                <span>Mardi 11 Janvier</span>
+                <span id="date"></span>
                 <button id="datePlus" class="fa fa-arrow-right"></button>
               </div>
               
@@ -74,9 +74,6 @@
               var output = document.getElementById("demo");
               output.innerHTML = slider.value + "h";
               
-              slider.oninput = function() {
-                output.innerHTML = this.value+ "h";
-              }
               </script>
 
           </div>
@@ -88,7 +85,7 @@
                 </div>
                 <div classe="w3-card-4">
                   <h1 style="background-color:#363636;color:white;margin:0;padding:1rem;">Emploi du temps</h1>
-                  <p>Salle reservée: <span>salle 1</span></p>
+                  <p>Nom de la salle : <span id="SelectRoom"></span></p>
                   <p>A quelle date voulez vous reserver?
                     <input type="date" id="start" name="trip-start" min="2022-01-01" max="2022-12-31">
                   </p>
@@ -120,9 +117,6 @@
 
     <script>
         let socket = io();
-
-       
-
     </script>
     <script src="../js/MapHighlight.js"></script>
     <script src="../js/rooms.js"></script>
