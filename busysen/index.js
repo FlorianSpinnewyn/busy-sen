@@ -174,6 +174,11 @@ async function main() {
       await client.connect();
       //console.log(client)
       await listDatabases(client);
+      //console.log(await getLevelData(client,'1'));
+      //console.log(await getDataUser(client,'fnjdjnfsd'));
+      //console.log(await getDataRoom(client,'C401'));
+
+      /*
       await newReservation(client,{
           name : "C401",
           reservations : {
@@ -181,10 +186,8 @@ async function main() {
               end : 54321,
               idClient: "fnjdjnfsd",
               _id: new BSON.ObjectId()
-      }})
+      }})*/
       //await signUp(client, {email: "testazjaz@afbazf", password: "zjehfzek"});
-      //console.log(await getLevelData(client,"1"))
-      //console.log(await getDataUser(client,"fnjdjnfsd"))
 
   } catch (e) {
       console.error(e);
@@ -200,7 +203,7 @@ async function listDatabases(client){
 
 async function getLevelData(client, level){
   const date = Date.now()
-  //console.log(date)
+  console.log(date)
   const room = [];
   const cursor =  await client.db("Projet-Info").collection("Rooms").find({level:level});
   const result  = await cursor.toArray();
@@ -227,7 +230,7 @@ async function getDataUser(client,idClient){
 }
 
 async function getDataRoom(client, roomNumber){
-  return await client.db("Projet-Info").collection("Rooms").findOne({ number:roomNumber});
+  return await client.db("Projet-Info").collection("Rooms").findOne({ name:roomNumber});
 }
 
 async function newReservation(client, data){
@@ -254,7 +257,7 @@ async function removeReservation(client, idRoom,idReservations){
 }
 
 async function signIn(client,data){
-  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email,password:data.passorwd});
+  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email,password:data.pa});
   //const match = await bcrypt.compare(data.password, user.password);
   if(!user) return -1;
   //se loger
