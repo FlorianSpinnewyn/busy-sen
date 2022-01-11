@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="./css/login.css" />
-    
+    <script src="/socket.io/socket.io.js"></script>
     <title>Busy'Sen</title>
 </head>
 
@@ -24,9 +24,13 @@
     <input type="submit" value="Connexion" /><br>
   <a href="/register">Inscrivez-vous ici !</a>
 </form>
+<p id="erreur"></p>
 
 </body>
-<script src="../js/modules/loggerLogin.js"></script>
+<script>
+    let socket = io();
+</script>
+<script src="../js/modules/logger.js"></script>
 <script src="../js/login.js"></script>
 
 

@@ -77,13 +77,13 @@ app.get('/register', body('register').isLength({ min: 3 }).trim().escape(), (req
   req.session.username = undefined;
 });
 
-app.get('/login', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+app.get('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res) => {
   res.sendFile(__dirname + '/front/html/login.html');
   req.session.username = undefined;
 });
 
 
-app.get('/index', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+app.get('/index', body('index').isLength({ min: 3 }).trim().escape(), (req, res) => {
   let sessionData = req.session;
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
@@ -92,7 +92,7 @@ app.get('/index', body('register').isLength({ min: 3 }).trim().escape(), (req, r
   }
 });
 
-app.get('/reservation', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+app.get('/reservation', body('reservation').isLength({ min: 3 }).trim().escape(), (req, res) => {
   let sessionData = req.session;
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
@@ -101,7 +101,7 @@ app.get('/reservation', body('register').isLength({ min: 3 }).trim().escape(), (
   }
 });
 
-app.get('/profil', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
+app.get('/profil', body('profil').isLength({ min: 3 }).trim().escape(), (req, res) => {
   let sessionData = req.session;
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
@@ -113,7 +113,7 @@ app.get('/profil', body('register').isLength({ min: 3 }).trim().escape(), (req, 
 
 app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (req, res) => {
   const login = req.body.login
-  const passorwd = req.body.passorwd
+  const password = req.body.password
   // Error management
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -121,11 +121,15 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
     //return res.status(400).json({ errors: errors.array() });
   } else {
     // Store login
-    console.log(client)
-    if(await signIn(client, {email: login, password: passorwd})) {
-      console.log("Mauvais mdp");
-    }else {
-      console.log("Connexion : ", login, " ", passorwd)
+    const result = await signIn(client, {email: login, password: password});
+    if(result == -2){
+      res.send('wrong_mdp');
+    }
+    else if(result == -1){
+      res.send('wrong_email');
+    }
+    else {
+      console.log("Connexion : ", login, " ", password)
       req.session.username = login;
       req.session.save()
       res.redirect('/');
@@ -136,18 +140,28 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
 
 app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
   const login = req.body.login
-  const passorwd = req.body.passorwd
+  const password = req.body.password
+
   // Error management
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
     //return res.status(400).json({ errors: errors.array() });
   } else {
+    
+    //PRB ERREUR AU DESSUS ET PRB AWAIT EN DESSOUS !
+
     // Store login
-    console.log("Inscription : ", login, " ", passorwd)
-    req.session.username = login;
-    req.session.save()
-    res.redirect('/');
+    const result = await signUp(client, {email: login, password: password});
+    if(result == -1){
+      res.send('already_exist');
+    }
+    else {
+      console.log("Inscription : ", login, " ", password)
+      req.session.username = login;
+      req.session.save()
+      res.redirect('/');
+    }
   }
 });
 
@@ -187,7 +201,7 @@ async function main() {
               idClient: "fnjdjnfsd",
               _id: new BSON.ObjectId()
       }})*/
-      //await signUp(client, {email: "testazjaz@afbazf", password: "zjehfzek"});
+      //console.log(await signUp(client, {email: "testazjaz@afbazf", password: "zjehfzek"}));
 
   } catch (e) {
       console.error(e);
@@ -257,9 +271,10 @@ async function removeReservation(client, idRoom,idReservations){
 }
 
 async function signIn(client,data){
-  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email,password:data.pa});
+  const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
   //const match = await bcrypt.compare(data.password, user.password);
   if(!user) return -1;
+  if(data.password != user.password) return -2;
   //se loger
   return 0;
 }
@@ -271,4 +286,3 @@ async function signUp(client,data){
   //se loger
   return 0;
 }
-

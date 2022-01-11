@@ -9,11 +9,14 @@ let registter = (function(){
                 login: username,
                 password: mp
             },
-            success: () => {
-                //IF FONCTION ELLIOT TRUE ALORS
-                window.location.href = "/index";
-                //ELSE
-                //REDIRECT ./REGISTER + message erreur
+            success: (data) => {
+                let text1 = document.getElementById('erreur');
+                if(data == 'already_exist') {
+                    text1.innerHTML = "Cet email est déjà utilisée";
+                }
+                else {
+                    window.location.href = "/index";
+                }
             },
         });
     }

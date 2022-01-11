@@ -9,11 +9,16 @@ let logger = (function(){
                 login: username,
                 password: mp
             },
-            success: () => {
-                //IF FONCTION ELLIOT TRUE ALORS
-                window.location.href = "/index";
-                //ELSE
-                //REDIRECT ./LOGIN + message erreur
+            success: (data) => {
+                let text1 = document.getElementById('erreur');
+                if(data == 'wrong_mdp') {
+                    text1.innerHTML = "Votre mot de passe est incorrect";
+                }
+                else if(data == 'wrong_email') {
+                    text1.innerHTML = "Votre email est incorrect";
+                }else {
+                    window.location.href = "/index";
+                }
             },
         });
     }
