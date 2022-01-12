@@ -32,8 +32,9 @@ day.setMinutes(0);
 day.setSeconds(0);
 
 //Creation de la page suivant l'étage
-let level = 1;
+let level = 0;
 addPlan(level)
+socket.emit("actuPlan", day, level);
 
 //Actu du slider
 slider.oninput = function() {
@@ -49,8 +50,68 @@ displayDate(day)
 //Affichage des salle dispo
 socket.on("actuPlan2", (freeRooms) => {
   console.log("les salles libre a ", day ," sont ", freeRooms);
+  console.log(freeRooms)
+  for( let u of freeRooms) {
+    document.getElementById(u).style.borderColor ='green' ;
+  }
+  for(let i = 0; i<rooms[level+1].length;i++) {
+    document.getElementById(rooms[level+1][i][0]).style.transform = "rotate( " + rooms[level+1][i][2] + "deg)"
+  }
 });
 
 socket.on("getDataRoom2", (freeRooms, nameRoom) => {
   console.log("les reservation de la salle ",nameRoom ," sont ", freeRooms);
+});
+
+
+/**  Change date with arrows */
+
+weekday = ['Dimanche','Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi','Samedi']
+months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
+
+document.getElementById('datePlus').addEventListener("click", event => {
+  day.setDate(day.getDate() + 1);
+  let d = weekday[day.getDay()];
+  let today = new Date();
+  document.getElementById("today").innerHTML = d + " " + (day.getDate()) + " " + months[day.getMonth()] + " " + day.getFullYear();
+  if (day.getDay() == 6) {
+    day.setDate(day.getDate() +1);
+  }
+  document.getElementById("dateMoins").disabled = false;
+  if (day.getDate() == today.getDate() + 7) {
+    document.getElementById("datePlus").disabled = true;
+  }
+  socket.emit("actuPlan", day, level);
+});
+
+document.getElementById('dateMoins').addEventListener("click", event => {
+  day.setDate(day.getDate() - 1);
+  let d = weekday[day.getDay()];
+  let today = new Date();
+  today.setHours(0);
+  today.setMinutes(0);
+  today.setSeconds(0);
+  document.getElementById("today").innerHTML = d + " " + (day.getDate()) + " " + months[day.getMonth()] + " " + day.getFullYear();
+  if (day.getDay() == 1) {
+    day.setDate(day.getDate() -  1);
+  }
+
+  day.setHours(0);
+  day.setMinutes(0);
+  day.setSeconds(0);
+  console.log("day", day);
+  console.log(today);
+  if (day.getDate() == today.getDate()) {
+    document.getElementById("dateMoins").disabled = true;
+  }
+  document.getElementById("datePlus").disabled = false;
+  socket.emit("actuPlan", day, level);
+});
+
+document.getElementById('niveauPlus').addEventListener("click", event => {
+  document.getElementById('container').remove();
+  level++;
+  document.getElementById('levelActu').innerHTML = level;
+  addPlan(level)
+  socket.emit("actuPlan", day, level);
 });

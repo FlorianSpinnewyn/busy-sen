@@ -1,26 +1,26 @@
 /*
 	Version : 1
-	Auteur : BRIDE Maxime
+	Auteur : BRE Maxime
 	Date : 12/02/11
 	Contact : macsou@gmail.com
 	
 	Bugs connus :
-	 - Ne gère pas la propriété CSS clip.
-	 - Ne gère pas la propriété CSS position avec la valeur fixed pour l'image.
-	 - Ne gère pas la propriété CSS overflow pour un objet englobant l'image.
+	 - Ne gï¿½re pas la propriï¿½tï¿½ CSS clip.
+	 - Ne gï¿½re pas la propriï¿½tï¿½ CSS position avec la valeur fixed pour l'image.
+	 - Ne gï¿½re pas la propriï¿½tï¿½ CSS overflow pour un objet englobant l'image.
 	 
 	A faire :
-	 - Régler les bugs ci-dessus.
-	 - Afficher réellement la bordure des zones area (des cercles ou des polygones au lieu de simples rectangles).
+	 - Rï¿½gler les bugs ci-dessus.
+	 - Afficher rï¿½ellement la bordure des zones area (des cercles ou des polygones au lieu de simples rectangles).
 */
 
 /*
-	Cette classe permet de mettre en évidence des zones area d'une map HTML.
-	Paramètres :
-	 - _img : Objet Image représentant l'image dont on veut mettre en évidence les zones réactives.
-	 - _persistent : Booléen permettant de dire si les rectangles de mise en évidence doivent disparaître quand le pointeur n'est plus sur eux.
-	 - _direct : Booléen permettant de dire si les rectangles de mise en évidence doivent apparaître directement ou bien lors du passage de la souris sur la zone.
-	 - _resize : Booléen permettant de dire si les rectangles de mise en évidence doivent s'adapter à un éventuellement changement de taille de l'image.
+	Cette classe permet de mettre en ï¿½vidence des zones area d'une map HTML.
+	Paramï¿½tres :
+	 - _img : Objet Image reprï¿½sentant l'image dont on veut mettre en ï¿½vidence les zones rï¿½actives.
+	 - _persistent : Boolï¿½en permettant de dire si les rectangles de mise en ï¿½vidence doivent disparaï¿½tre quand le pointeur n'est plus sur eux.
+	 - _direct : Boolï¿½en permettant de dire si les rectangles de mise en ï¿½vidence doivent apparaï¿½tre directement ou bien lors du passage de la souris sur la zone.
+	 - _resize : Boolï¿½en permettant de dire si les rectangles de mise en ï¿½vidence doivent s'adapter ï¿½ un ï¿½ventuellement changement de taille de l'image.
 */
 function MapHighlight(_img, _persistent, _direct, _resize) {
 	var img = _img;
@@ -30,20 +30,21 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	var obj = this;
 	var timer = 0;
 	var rectsContainer = document.createElement('div');
+	rectsContainer.id="container"
 	rectsContainer.style.position = 'absolute';
 	rectsContainer.style.left = rectsContainer.style.top = '0px';
 	document.body.appendChild(rectsContainer);
 	
 	/*
 	========================================================================
-	=========================== Méthodes privées ===========================
+	=========================== Mï¿½thodes privï¿½es ===========================
 	========================================================================
 	*/
 	
 	/*
-		Permet de trouver la map associée à une image.
-		Paramètres :
-		 - img : L'image dont on veut connaître la map associée.
+		Permet de trouver la map associï¿½e ï¿½ une image.
+		Paramï¿½tres :
+		 - img : L'image dont on veut connaï¿½tre la map associï¿½e.
 	*/
 	var findMap = function(img) {
 		var maps = document.getElementsByTagName('map');
@@ -56,8 +57,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Permet de supprimer tous les rectangles de mise en évidence et l'interaction de toutes les zones area d'une map.
-		Paramètres :
+		Permet de supprimer tous les rectangles de mise en ï¿½vidence et l'interaction de toutes les zones area d'une map.
+		Paramï¿½tres :
 		 - map : La map que l'on veut nettoyer.
 	*/
 	var clearMap = function(map) {
@@ -74,8 +75,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 			
 	/*
 		Renvoie la position absolue d'un objet.
-		Paramètres :
-		 - obj : Objet HTML dont on veut connaître la position absolue.
+		Paramï¿½tres :
+		 - obj : Objet HTML dont on veut connaï¿½tre la position absolue.
 	*/
 	var findPos = function(obj) {
 		var l = t = 0;
@@ -89,9 +90,9 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Crée un rectangle qui disparaît quand on déplace la souris hors de lui.
-		Paramètres :
-		 - area : Objet HTML représentant la zone area associée au rectangle à créer.
+		Crï¿½e un rectangle qui disparaï¿½t quand on dï¿½place la souris hors de lui.
+		Paramï¿½tres :
+		 - area : Objet HTML reprï¿½sentant la zone area associï¿½e au rectangle ï¿½ crï¿½er.
 	*/
 	var createRect = function(area) {
 		var dim = coordsToDim(area.coords, area.shape);
@@ -104,6 +105,7 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 		for(var i = 0; i < area.attributes.length; i++) {
 			if(area.attributes[i].name != 'coords' && area.attributes[i].name != 'shape') {
 				rect.setAttribute(area.attributes[i].name, area.getAttribute(area.attributes[i].name));
+				rect.id = rect.id.substring(1) ;
 			}
 		}
 		rect.style.cssText += area.style.cssText;
@@ -125,8 +127,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	
 	/*
 		Renvoie les dimensions d'un polygne (position coin haut gauche et position coin bas droite).
-		Paramètres :
-		 - coords : Tableau d'entier représentant les coordonnées du polygone.
+		Paramï¿½tres :
+		 - coords : Tableau d'entier reprï¿½sentant les coordonnï¿½es du polygone.
 	*/
 	var dimPoly = function(coords) {
 		var minT, minL, maxT, maxL;
@@ -153,9 +155,9 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Renvoie l'épaisseur de la bordure d'une image.
-		Paramètres :
-		 - img : L'image dont on veut connaître l'épaisseur de la bordure.
+		Renvoie l'ï¿½paisseur de la bordure d'une image.
+		Paramï¿½tres :
+		 - img : L'image dont on veut connaï¿½tre l'ï¿½paisseur de la bordure.
 	*/
 	var getBorderWidth = function(img) {
 		var width = img.offsetWidth;
@@ -168,9 +170,9 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Renvoie la hauteur naturelle (véritable) de l'image img.
-		Paramètres :
-		 - img : L'image dont on veut connaître la hauteur naturelle.
+		Renvoie la hauteur naturelle (vï¿½ritable) de l'image img.
+		Paramï¿½tres :
+		 - img : L'image dont on veut connaï¿½tre la hauteur naturelle.
 	*/
 	var getNaturalHeight = function(img){
 		if(typeof img.naturalHeight == "undefined") {
@@ -183,9 +185,9 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Renvoie la largeur naturelle (véritable) de l'image img.
-		Paramètres :
-		 - img : L'image dont on veut connaître la largeur naturelle.
+		Renvoie la largeur naturelle (vï¿½ritable) de l'image img.
+		Paramï¿½tres :
+		 - img : L'image dont on veut connaï¿½tre la largeur naturelle.
 	*/
 	var getNaturalWidth = function(img){
 		if(typeof img.naturalWidth == "undefined") {
@@ -199,10 +201,10 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 
 	
 	/*
-		Renvoie les dimensions (top, left, width, height) d'une zon area en fonction de son type et de ses coordonnées.
-		Paramètres :
-		 - coordsStr : Chaîne de caractères représentant les coordonnées de la zone area.
-		 - shape : Chaîne de caractères représentant le type de la zone area.
+		Renvoie les dimensions (top, left, width, height) d'une zon area en fonction de son type et de ses coordonnï¿½es.
+		Paramï¿½tres :
+		 - coordsStr : Chaï¿½ne de caractï¿½res reprï¿½sentant les coordonnï¿½es de la zone area.
+		 - shape : Chaï¿½ne de caractï¿½res reprï¿½sentant le type de la zone area.
 	*/
 	var coordsToDim = function(coordsStr, shape) {
 		var mapPos = findPos(img);
@@ -232,7 +234,7 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 		}
 		var bw = getBorderWidth(img);
 		if(resize) {
-			//Calculs dans le cas où l'image est redimensionnée.
+			//Calculs dans le cas oï¿½ l'image est redimensionnï¿½e.
 			var ratioW = (getNaturalWidth(img)) / (img.offsetWidth - 2 * bw);
 			var ratioH = (getNaturalHeight(img)) / (img.offsetHeight - 2 * bw);
 			var diffL = l - mapPos[0] + bw * ratioW;
@@ -249,7 +251,7 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 
 	/*
-		Permet de mettre à jour les rectangles de mise en évidence à chaque déplacement de l'image associée.
+		Permet de mettre ï¿½ jour les rectangles de mise en ï¿½vidence ï¿½ chaque dï¿½placement de l'image associï¿½e.
 	*/
 	var initInterval = function() {
 		var pos = findPos(img);
@@ -264,12 +266,12 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	
 	/*
 	========================================================================
-	========================== Méthodes publiques ==========================
+	========================== Mï¿½thodes publiques ==========================
 	========================================================================
 	*/
 	
 	/*
-		Permet de mettre en place la mise en évidence de toutes les zones area de l'image concernée.
+		Permet de mettre en place la mise en ï¿½vidence de toutes les zones area de l'image concernï¿½e.
 	*/
 	this.highlight = function() {
 		var map = findMap(img);
@@ -292,8 +294,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	
 	/*
 		Permet de renseigner une nouvelle valeur pour la variable img.
-		Paramètres :
-		 - _img : Objet Image représentant la nouvelle valeur de la variable img.
+		Paramï¿½tres :
+		 - _img : Objet Image reprï¿½sentant la nouvelle valeur de la variable img.
 	*/
 	this.setImg = function(_img) {
 		clearMap(findMap(img));
@@ -302,8 +304,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 
 	/*
 		Permet de renseigner une nouvelle valeur pour la variable persistent.
-		Paramètres :
-		 - _persistent : Booléen représentant la nouvelle valeur de la variable persistent.
+		Paramï¿½tres :
+		 - _persistent : Boolï¿½en reprï¿½sentant la nouvelle valeur de la variable persistent.
 	*/
 	this.setPersistent = function(_persistent) {
 		persistent = _persistent;
@@ -311,8 +313,8 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 
 	/*
 		Permet de renseigner une nouvelle valeur pour la variable direct.
-		Paramètres :
-		 - _direct : Booléen représentant la nouvelle valeur de la variable direct.
+		Paramï¿½tres :
+		 - _direct : Boolï¿½en reprï¿½sentant la nouvelle valeur de la variable direct.
 	*/
 	this.setDirect = function(_direct) {
 		direct = _direct;
@@ -320,15 +322,15 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 
 	/*
 		Permet de renseigner une nouvelle valeur pour la variable resize.
-		Paramètres :
-		 - _resize : Booléen représentant la nouvelle valeur de la variable resize.
+		Paramï¿½tres :
+		 - _resize : Boolï¿½en reprï¿½sentant la nouvelle valeur de la variable resize.
 	*/
 	this.setResize = function(_resize) {
 		resize = _resize;
 	}
 	
 	/*
-		Permet de mettre à jour les rectangles de mise en évidence.
+		Permet de mettre ï¿½ jour les rectangles de mise en ï¿½vidence.
 	*/
 	this.update = function() {
 		clearMap(findMap(img));
@@ -336,7 +338,7 @@ function MapHighlight(_img, _persistent, _direct, _resize) {
 	}
 	
 	/*
-		Permet de supprimer la mise en évidence sur l'image courante.
+		Permet de supprimer la mise en ï¿½vidence sur l'image courante.
 	*/
 	this.destroy = function() {
 		clearMap(findMap(img));

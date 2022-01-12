@@ -53,7 +53,7 @@
 
             <div style="float:right;">
               <button id="niveauPlus" class="fa fa-arrow-up"></button> <br>
-              <span>Niveau 1</span> <br>
+              <p>Niveau <span id="levelActu">0</span></p> <br>
               <button id="niveauMoins" class="fa fa-arrow-down"></button>
             </div>
           
@@ -65,7 +65,7 @@
               </div>
               <div>
                 <button id="dateMoins" class="fa fa-arrow-left"></button>
-                <span id="date"></span>
+                <span id="today"></span>
                 <button id="datePlus" class="fa fa-arrow-right"></button>
               </div>
               
@@ -86,11 +86,9 @@
                 <div classe="w3-card-4">
                   <h1 style="background-color:#363636;color:white;margin:0;padding:1rem;">Emploi du temps</h1>
                   <p>Nom de la salle : <span id="SelectRoom"></span></p>
-                  <p>A quelle date voulez vous reserver?
-                    <input type="date" id="start" name="trip-start" min="2022-01-01" max="2022-12-31">
-                  </p>
                   <p>A quelle heure voulez-vous reserver?
-                    <input type="time" id="appt" name="appt" min="09:00" max="18:00" required>  
+                    de <input type="time" id="appt" name="appt" min="09:00" max="18:00" required> à  
+                    <input type="time" id="appt" name="appt" min="09:00" max="21:00" required>  
                   </p>
                   <button type="submit" style="margin-left:64rem;margin-bottom:1rem;" id="buttonReservation">Reserver</button>
                 </div>

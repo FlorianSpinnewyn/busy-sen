@@ -2,6 +2,9 @@
 		border:solid 3px red;
 }
 
+.free {
+	border:solid 3px green;
+}
 
 a { 
 	pointer-events: none; 
