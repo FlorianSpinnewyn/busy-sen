@@ -55,8 +55,9 @@ async function main() {
                 _id: new BSON.ObjectId()
         }})*/
         //console.log(await getLevelData(client,"1"))
-        await getDataUser(client,"fnjdjnfsd")
-        await removeReservation(client,"C401")
+        //await getDataUser(client,"fnjdjnfsd")
+        //await removeReservation(client,"C401",un id que tu prends avec getDataUser)
+        await filterData(client,{capacity:40,projector:1})
     } catch (e) {
         console.error(e);
     }
@@ -74,36 +75,32 @@ async function listDatabases(client){
 };
 
 async function getLevelData(client, level){
-    const date = Date.now()
-    console.log(date)
     const room = [];
     const cursor =  await client.db("Projet-Info").collection("Rooms").find({level:level});
     const result  = await cursor.toArray();
+    if(result.isEmpty()) return -1;
 
     for(let i of result){
         let occupied = false;
         for(let j of i.reservations){
-            console.log("test")
-            console.log(i)
             if(j.start <= date && j.end >= date) {
                 occupied = true;
                 break;
             }
         }
-        if(!occupied) room.push(i.name)
+        if(!occupied) room.push(i.name);
     }
 
     return room;
 }
 
 async function getDataUser(client,idClient){
-    //faire un filter sur les salles
     const cursor = await client.db("Projet-Info").collection("Rooms").find({'reservations.idClient': idClient});
-    if(!cursor) return -1;
     const arrayRoom = await cursor.toArray();
+    if(arrayRoom.isEmpty()) return -1;
 
     arrayRoom.forEach(obj=>obj.reservations = obj.reservations.filter(e=>e.idClient==idClient));
-    console.log(arrayRoom)
+    return arrayRoom
 }
 
 async function getDataRoom(client, roomNumber){
@@ -111,31 +108,21 @@ async function getDataRoom(client, roomNumber){
 }
 
 async function newReservation(client, data){
-    /*
-    data : {
-    number : "C956",
-    reservation : {
-        start: 12345,
-        end : 54321,
-        id: ObjectId("61dd4152058f9c92376dea7b")         // id utilisateur
-    }
-    */
     const roomData = await client.db("Projet-Info").collection("Rooms").findOne({ name: data.name});
     roomData.reservations.push(data.reservations);
     if(!roomData) return -1;
-    const result  = await client.db("Projet-Info").collection("Rooms").updateOne({number:data.number},{$set:roomData})
+    const result  = await client.db("Projet-Info").collection("Rooms").updateOne({number:data.number},{$set:roomData});
     return 0;
 }
 
 async function removeReservation(client, nameRoom,idReservations){
-    const result = await client.db("Projet-Info").collection("Rooms").updateOne({ name : nameRoom },{$pull : {reservations: {_id:new BSON.ObjectID(idReservations)}}})
+    await client.db("Projet-Info").collection("Rooms").updateOne({ name : nameRoom },{$pull : {reservations: {_id:new BSON.ObjectID(idReservations)}}});
 }
 
 async function signIn(client,data){
     const user = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
     const match = await bcrypt.compare(data.password, user.password);
     if(!match) return -1;
-    //se loger
     return 0;
 }
 
@@ -144,10 +131,10 @@ async function signUp(client,data){
     const result = await client.db("Projet-Info").collection("Users").findOne({ email : data.email});
     if(result) return -1;
     await client.db("Projet-Info").collection("Users").insertOne(data);
-    //se loger
     return 0;
 }
 
-async function filterData(client,data){
-    //doesn't work yet
+async function filterData(client, {capacity: capacity =20,level:level = 1,projector:projector = 0}){
+    const cursor = await client.db("Projet-Info").collection("Rooms").find({capacity:{$gte : capacity},level:level,projector:{$gte : projector}});
+    return await cursor.toArray();
 }
