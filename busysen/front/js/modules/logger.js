@@ -17,7 +17,7 @@ let logger = (function(){
                 else if(data == 'wrong_email') {
                     text1.innerHTML = "Votre email est incorrect";
                 }else {
-                    window.location.href = "/index";
+                    window.location.href = "/index/0";
                 }
             },
         });

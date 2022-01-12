@@ -13,7 +13,8 @@ const session = require("express-session")({
   saveUninitialized: true,
   cookie: {
     maxAge: 2 * 60 * 60 * 1000,
-    secure: false
+    secure: false,
+    level : 0
   }
 });
 const sharedsession = require("express-socket.io-session");
@@ -82,6 +83,9 @@ app.get('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res)
   req.session.username = undefined;
 });
 
+app.get('/index/:tagId', function(req, res) {
+  res.sendFile(__dirname + '/front/html/index.html');
+});
 
 app.get('/index', body('index').isLength({ min: 3 }).trim().escape(), (req, res) => {
   let sessionData = req.session;
@@ -165,7 +169,17 @@ app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (re
   }
 });
 
+let level = 0;
+
 io.on('connection', (socket) => {
+
+  socket.on("addlevel", () => {
+    socket.emit("addlevel2", level);
+  });
+
+  socket.on("addlevelbtn", () => {
+    socket.emit("addlevel", level++);
+  });
 
   socket.on("login", () => {
     console.log("Etudiant connecté")
@@ -181,9 +195,10 @@ io.on('connection', (socket) => {
     socket.emit("actuPlan2", tab);
   });
 
-  socket.on("getDataRoom", (nameRoom) => {
-    let tab = getDataRoom(client, nameRoom);
-    socket.emit("getDataRoom2", tab,nameRoom);
+  socket.on("getDataRoom", async(nameRoom) => {
+    let object = await getDataRoom(client, nameRoom);
+    console.log(object)
+    socket.emit("getDataRoom2", object,nameRoom);
   });
 
 });

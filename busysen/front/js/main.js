@@ -32,7 +32,8 @@ day.setMinutes(0);
 day.setSeconds(0);
 
 //Creation de la page suivant l'étage
-let level = 0;
+let level = parseInt(window.location.href[window.location.href.length - 1]);
+
 addPlan(level)
 socket.emit("actuPlan", day, level);
 
@@ -46,13 +47,18 @@ slider.oninput = function() {
 //date en jour
 displayDate(day)
 
+document.getElementById("levelActu").innerHTML = level;
+
 
 //Affichage des salle dispo
 socket.on("actuPlan2", (freeRooms) => {
+  for(let i = 0; i<rooms[level+1].length;i++) {
+    document.getElementById(rooms[level+1][i][0]).style.borderColor ='red' ;
+  }
   console.log("les salles libre a ", day ," sont ", freeRooms);
   console.log(freeRooms)
-  for( let u of freeRooms) {
-    document.getElementById(u).style.borderColor ='green' ;
+  for( let i = 0; i<freeRooms.length;i++) { 
+    document.getElementById(freeRooms[i]).style.borderColor ='green' ;
   }
   for(let i = 0; i<rooms[level+1].length;i++) {
     document.getElementById(rooms[level+1][i][0]).style.transform = "rotate( " + rooms[level+1][i][2] + "deg)"
@@ -109,9 +115,11 @@ document.getElementById('dateMoins').addEventListener("click", event => {
 });
 
 document.getElementById('niveauPlus').addEventListener("click", event => {
-  document.getElementById('container').remove();
-  level++;
-  document.getElementById('levelActu').innerHTML = level;
-  addPlan(level)
-  socket.emit("actuPlan", day, level);
+  document.location.href='/index/' + (level+1);
+});
+
+
+
+document.getElementById('niveauMoins').addEventListener("click", event => {
+  document.location.href='/index/' + (level-1);
 });

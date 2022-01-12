@@ -15,7 +15,7 @@ let registter = (function(){
                     text1.innerHTML = "Cet email est déjà utilisée";
                 }
                 else {
-                    window.location.href = "/index";
+                    window.location.href = "/index/0";
                 }
             },
         });
