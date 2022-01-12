@@ -77,9 +77,9 @@ app.get('/', (req, res) => {
 app.get('/new', body('new').isLength({ min: 3 }).trim().escape(), (req, res) => {
   let sessionData = req.session;
   if (!sessionData.username) {
-    res.sendFile(dirname + '/front/html/login.html');
+    res.sendFile(__dirname + '/front/html/login.html');
   } else {
-    res.sendFile(dirname + '/front/html/new.html');
+    res.sendFile(__dirname + '/front/html/new.html');
   }
 });
 
