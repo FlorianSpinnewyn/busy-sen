@@ -228,13 +228,22 @@ io.on('connection', (socket) => {
     for (let i = 0; i < salles.length; i++) {
       //console.log(salles[i])
       if(await createRoom(client, salles[i]) == -1) {
-        console.log(salles[i]);
+        //console.log(salles[i]);
         socket.emit('erreur_crea_etage',salles[i].name);
       }else {
         await createRoom(client, salles[i]);
         socket.emit('valid');
       }
     }
+  });
+
+  socket.on("get_reservation", async () => {
+    socket.emit('reservation_client', await getDataUser(client, socket.handshake.session.username),socket.handshake.session.username);
+  });
+
+  socket.on("supp_reservation", async (idRoom,idReservations) => {
+    socket.emit('supp_client_reservation_bdd', await removeReservation(client,idRoom,idReservations));
+    console.log("Suppresion Reservation");
   });
 
 });
@@ -327,7 +336,7 @@ async function newReservation(client, data){
 }
 
 async function removeReservation(client, idRoom,idReservations){
-  //const result = await client.db("Projet-Info").collection("Rooms").update({ _id : idRoom },{$pull : {reservations: {_id:idReservations}})
+  const result = await client.db("Projet-Info").collection("Rooms").update({ _id : idRoom },{$pull : {reservations: {_id:idReservations}}});
 }
 
 async function signIn(client,data){

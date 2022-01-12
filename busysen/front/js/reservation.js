@@ -1,47 +1,46 @@
 // Redirection
 document.getElementById("GoProfil").addEventListener("click", event => {
-  socket.emit("Redirection","../html/profil.html", false);
+    socket.emit("Redirection", "./profil", false);
 });
 document.getElementById("GoHome").addEventListener("click", event => {
-  socket.emit("Redirection","../html/index.html", false);
+    socket.emit("Redirection", "./index/0", false);
 });
 
 
-document.getElementById('cancel').addEventListener("click", event => 
-{
-    document.getElementById('supprReservation').hidden=true;
+document.getElementById('cancel').addEventListener("click", event => {
+    document.getElementById('supprReservation').hidden = true;
 });
 
 socket.on("Redirection2", data => {
-document.location.href=data; 
+    document.location.href = data;
 });
 
-days = ['Dimanche','Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi','Samedi']
+days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi']
 months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
 
 function tabDates() {
     let tbody = document.getElementById("tabBody");
     let d = new Date();
-    if(d.getDay() == 0){
-        d.setDate(d.getDate()+1);
+    if (d.getDay() == 0) {
+        d.setDate(d.getDate() + 1);
     }
-    for(let i = 0; i < 7; i++){
-        let row = document.createElement('tr'); 
+    for (let i = 0; i < 7; i++) {
+        let row = document.createElement('tr');
         let rowData = document.createElement("td");
-        rowData.innerHTML = days[d.getDay()]+' '+ d.getDate()+' '+months[d.getMonth()];
+        rowData.innerHTML = days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
         row.appendChild(rowData);
         tbody.appendChild(row);
         row.hidden = true;
-        row.setAttribute("id",days[d.getDay()]+d.getDate())
+        row.setAttribute("id", days[d.getDay()] + d.getDate())
         rowData.className = "dateDay";
-        rowData.setAttribute("colspan","3");
-        d.setDate(d.getDate()+1);
-        if(d.getDay() == 0){
-            d.setDate(d.getDate()+1);
+        rowData.setAttribute("colspan", "3");
+        d.setDate(d.getDate() + 1);
+        if (d.getDay() == 0) {
+            d.setDate(d.getDate() + 1);
         }
     }
 }
-function createResTable(data1, data2, date) {
+function createResTable(data1, data2, date, count) {
     let rowBefore = document.getElementById(date);
     let row = document.createElement("tr");
     let buttonCancel = document.createElement("button");
@@ -55,21 +54,23 @@ function createResTable(data1, data2, date) {
     rowData2.appendChild(buttonCancel);
     para.innerHTML = data2;
     rowData2.appendChild(para);
-    buttonCancel.setAttribute("class","buttonCancel");
+    buttonCancel.setAttribute("class", "buttonCancel");
+    buttonCancel.setAttribute("id", count);
+
     buttonCancel.innerHTML = "x";
     rowData1.setAttribute("class", "horaire");
     rowData2.setAttribute("class", "infos");
 
     rowBefore.hidden = false;
 
-    buttonCancel.addEventListener("click", event => 
-    {
-        document.getElementById('supprReservation').hidden=false;
+    buttonCancel.addEventListener("click", event => {
+        document.getElementById('supprReservation').hidden = false;
     });
 }
 
 
-tabDates();
+//tabDates();
+/*
 createResTable("8h<br>-<br>10h", "2", "Mercredi12");
 createResTable("8h<br>-<br>10h", "3", "Jeudi13");
 createResTable("8h<br>-<br>10h", "4", "Vendredi14");
@@ -77,3 +78,70 @@ createResTable("8h<br>-<br>10h", "5", "Samedi15");
 createResTable("8h<br>-<br>10h", "6", "Lundi17");
 createResTable("8h<br>-<br>10h", "7", "Mardi18");
 createResTable("8h<br>-<br>10h", "8", "Mercredi19");
+*/
+
+socket.emit('get_reservation');
+
+socket.on('reservation_client', (data, user) => {
+    tabReservationsUser = data;
+    console.log(data);
+    let count = 0;
+    for (let i = 0; i < tabReservationsUser.length; i++) {
+        for (let j = 0; j < tabReservationsUser[i].reservations.length; j++) {
+            let debut = tabReservationsUser[i].reservations[j].start;
+            let fin = tabReservationsUser[i].reservations[j].start;
+            let salle = tabReservationsUser[i].name;
+            let etage = tabReservationsUser[i].level;
+            let capacity = tabReservationsUser[i].capacity;
+            let projector = tabReservationsUser[i].projector;
+
+            let date = new Date(0);
+            date.setTime(debut);
+            date.setSeconds(debut);
+
+            let date2 = new Date(0);
+            date2.setTime(fin);
+            date2.setSeconds(fin);
+
+            if (projector == 1) {
+                projector = "Oui";
+            } else {
+                projector = "Non";
+            }
+
+            let tbody = document.getElementById("tabBody");
+
+            let row = document.createElement('tr');
+            let rowData = document.createElement("td");
+            rowData.innerHTML = days[date.getDay()] + ' ' + date.getDate() + ' ' + months[date.getMonth()];
+            row.appendChild(rowData);
+            tbody.appendChild(row);
+            row.hidden = true;
+            row.setAttribute("id", days[date.getDay()] + date.getDate())
+            rowData.className = "dateDay";
+            rowData.setAttribute("colspan", "3");
+
+            createResTable(date.getHours() + "h - " + date2.getHours() + "h", "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
+
+
+        }
+    }
+    for (let i = 0; i < tabReservationsUser.length; i++) {
+        for (let j = 0; j < tabReservationsUser[i].reservations.length; j++) {
+            //console.log(tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id);
+            let btn = document.getElementById(tabReservationsUser[i].reservations[j]._id);
+            btn.addEventListener('click', () => {
+                console.log(btn.id);
+                let btn2 = document.getElementById('validation');
+                btn2.addEventListener('click', () => {
+                    //console.log(tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id);
+                    socket.emit('supp_reservation', (tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id));
+                    window.location.href = './reservation';
+                });
+
+            })
+        }
+    }
+});
+
+
