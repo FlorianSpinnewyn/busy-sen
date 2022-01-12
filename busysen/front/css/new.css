@@ -1,0 +1,29 @@
+#forms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#newetage {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#form_new {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+}
+#valider {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#return {
+    grid-column: 2;
+    grid-row: 1;
+}

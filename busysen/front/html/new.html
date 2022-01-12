@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Busy'sen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="../css/profil.css">
+    <link rel="stylesheet" href="../css/new.css">
+
+    <script type="text/javascript" src="../js/MapHighlight2.js"></script>
+</head>
+
+<body>
+    <div id="forms">
+        <form method="post" enctype="multipart/form-data" id="img-etage">
+            <div>
+                <label id="text_top" for="image_uploads">Sélectionner un etage uploader (PNG, JPG - 1200px /
+                    836px)</label>
+                <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png">
+            </div>
+            <div class="preview">
+                <p>Aucun fichier sélectionné pour le moment</p>
+            </div>
+            <img id="newetage" usemap="#image-map">
+
+            <map name="image-map" id="image-map">
+
+            </map>
+        </form>
+
+        <form id="etagenb">
+            <label id="title">Etage :</label>
+            <input type="number" id="etage">
+            <input type="submit" value="Valider" id="valider_etagenb">
+        </form>
+
+        <form id="form_new">
+            <p>Informations sur la salle :</p>
+            <div>
+                <label id="title">Numero de la salle :</label>
+                <input type="text" id="salle">
+                <br>
+                <label id="title">Nombre de personnes :</label>
+                <input type="number" id="prs">
+                <br>
+                <label id="title">Projeteur :</label>
+                <input type="checkbox" id="proj">
+            </div>
+            <input type="submit" value="Creer" id="valider_etage">
+        </form>
+    </div>
+    <div id="buttons">
+        <p id="erreur_crea"></p>
+        <button id="valider" data-toggle="modal" data-target=".bd-example-modal-lg">Valider</button>
+        <button id="return">Annuler</button>
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true" id="popup">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    L'étage à bien été crée !
+                </div>
+                <a href="./index">Retour</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let socket = io();
+
+    document.getElementById("return").addEventListener("click", e => {
+        e.preventDefault();
+        window.location.href = "/profil";
+    });
+
+    document.getElementById("valider").hidden = true;
+    document.getElementById("form_new").hidden = true;
+    document.getElementById("popup").hidden = true;
+    document.getElementById("etagenb").hidden = true;
+
+</script>
+<script src="../js/zone.js"></script>
+<script src="../js/profil.js"></script>
+
+</html>
