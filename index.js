@@ -74,7 +74,7 @@ async function listDatabases(client){
     databasesList.databases.forEach(db => console.log(` - ${db.name}`));
 };
 
-async function getLevelData(client, level){
+async function getLevelData(client, level,date){
     const room = [];
     const cursor =  await client.db("Projet-Info").collection("Rooms").find({level:level});
     const result  = await cursor.toArray();
@@ -137,4 +137,8 @@ async function signUp(client,data){
 async function filterData(client, {capacity: capacity =20,level:level = 1,projector:projector = 0}){
     const cursor = await client.db("Projet-Info").collection("Rooms").find({capacity:{$gte : capacity},level:level,projector:{$gte : projector}});
     return await cursor.toArray();
+}
+
+async function createRoom(client,data){
+    const result = await client.db("Projet-Info").collection("Rooms").insertOne(data)
 }
