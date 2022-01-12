@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  padding-bottom: 3rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 /*Menu*/
@@ -106,12 +104,12 @@ overflow: auto;
 background-color: rgba(191, 191, 191, 0.50);
 padding-left:15rem;
 padding-right:15rem;
-padding-top:10rem;
+padding-top:0.8rem;
 text-align: center;
 background-repeat: no-repeat;
 }
 
-#buttonReservation {
+#buttonReservation, #niveauPlus, #niveauMoins {
 border: none;
 color: white;
 padding: .5rem 1rem;
@@ -127,139 +125,71 @@ color: black;
 border: 2px solid #f44336;
 }
 
-#buttonReservation:hover {
+#buttonReservation:hover, #niveauPlus:hover, #niveauMoins:hover {
 background-color: #f44336;
 color: white;
-}body {
-  margin: 0;
-  padding-bottom: 3rem;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-/*Menu*/
-.btn{
-background-color: #363636;
-color:rgb(255, 255, 255);
-border-style: none;
-padding:0.7rem;
 }
 
-.btn:hover{
-font-weight: bold;
-color: #E44747;
-}
-.btn2:hover{
-font-size: 1.4rem;;
-}
-
-.btn.active{
-color: #E44747;
-font-weight: bold;
+.niveau{
+  position:fixed;
+  z-index:2;
+  overflow: auto;
+  top: 30rem;
+  right:2rem;
 }
 
-/*Slide Bar*/
-.slidecontainer {
-width: 100%;
+.container {
+  margin-top:10px;
+  height:400px;
+  width: 100%;
+  display: inline-flex;
+  margin-left: 0;
 }
 
-.slider {
--webkit-appearance: none;
-width: 100%;
-height: 25px;
-background: #d3d3d3;
-outline: none;
-opacity: 0.7;
--webkit-transition: .2s;
-transition: opacity .2s;
+.timings {
+  text-align: right;
+  padding-right: 10px;
+  width: 100px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  font-size: 0.3em;
+  box-sizing: border-box
 }
 
-.slider:hover {
-opacity: 1;
+.timings span {
+  font-size: 200%;
+  color: #696969;
 }
 
-.slider::-webkit-slider-thumb {
--webkit-appearance: none;
-appearance: none;
-width: 25px;
-height: 25px;
-background: #E44747;
-cursor: pointer;
+.days {
+  height: 400px;
+  width: 620px;
+  padding: 0px 10px;
+  background-color: #F0F0F0;
+  border-color: #D1D1D1;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
 }
 
-.slider::-moz-range-thumb {
-width: 25px;
-height: 25px;
-background: #E44747;
-cursor: pointer;
+.event {
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-left-width: 10px;
+  border-color: #D1D1D1;
+  border-left-color: #f44336;
+  padding-left: 10px;
+  padding-top: 5px;
+  position: absolute;
+  font-size: 0.5em;
+  box-sizing: border-box;
 }
 
-.tooltip {
-position: relative;
-display: inline-block;
-}
-
-.tooltip .tooltiptext {
-visibility: hidden;
-width: 120px;
-background-color: #363636;
-color: #fff;
-text-align: center;
-border-radius: 6px;
-padding: 5px 0;
-position: absolute;
-z-index: 1;
-top: 115%;
-left: 50%;
-margin-left: -60px;
-}
-
-.tooltip .tooltiptext::after {
-content: "";
-position: absolute;
-bottom: 100%;
-left: 50%;
-margin-left: -5px;
-border-width: 5px;
-border-style: solid;
-border-color: transparent transparent black transparent;
-}
-
-.tooltip:hover .tooltiptext {
-visibility: visible;
-}
-
-/*emploie du temps*/
-.fenetre {
-position: fixed;
-top: 3.2rem;
-z-index: 30;
-width: 100%; 
-height: 100%; 
-overflow: auto;
-background-color: rgba(191, 191, 191, 0.50);
-padding-left:15rem;
-padding-right:15rem;
-padding-top:10rem;
-text-align: center;
-background-repeat: no-repeat;
-}
-
-#buttonReservation {
-border: none;
-color: white;
-padding: .5rem 1rem;
-text-align: center;
-text-decoration: none;
-display: inline-block;
-font-size: 16px;
-margin: 4px 2px;
-transition-duration: 0.4s;
-cursor: pointer;
-background-color: white; 
-color: black; 
-border: 2px solid #f44336;
-}
-
-#buttonReservation:hover {
-background-color: #f44336;
-color: white;
+.event .title {
+  color: #f44336;
+  font-size: 200%;
 }

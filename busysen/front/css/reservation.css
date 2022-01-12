@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  padding-bottom: 3rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
@@ -88,4 +86,49 @@ background-color: #E44747;
 background-color: #F5BABA;
 border-radius: 5px;
 box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.buttonCancel{
+  background-color: #F1A3A3;
+  color: #AB3535;
+  border: none;
+  float: right;
+}
+
+.buttonCancel:hover{
+  cursor: pointer;
+}
+
+.fenetre {
+  position: fixed;
+  top: 3.2rem;
+  z-index: 30;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto;
+  background-color: rgba(191, 191, 191, 0.50);
+  padding-left:15rem;
+  padding-right:15rem;
+  padding-top:10rem;
+  text-align: center;
+  background-repeat: no-repeat;
+}
+
+#buttonReservation {
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: white; 
+  color: black; 
+  border: 2px solid #f44336;
+}
+
+#buttonReservation:hover {
+  background-color: #f44336;
+  color: white;
 }
