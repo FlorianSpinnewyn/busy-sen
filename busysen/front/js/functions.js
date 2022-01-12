@@ -48,3 +48,6 @@ function displayDate(date){
 
     nodeDate.innerHTML = dateLocale;
 }
+
+
+

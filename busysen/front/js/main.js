@@ -73,6 +73,18 @@ socket.on("getDataRoom2", (obj, nameRoom) => {
   document.getElementById('SelectRoomEtage').innerHTML=obj.level;
   document.getElementById('SelectRoomProj').innerHTML=obj.projector;
   tmp = nameRoom;
+  let tabForCalend = [];
+  for(let o of obj.reservations) {
+    let dateTmp = new Date(+day);
+    dateTmp.setHours(0);
+    dateTmp.setMinutes(0);
+    dateTmp.setSeconds(0);
+    if((o.start-dateTmp.getTime())<100000000){
+      console.log("reservation pour cette salle ajd: ",o)
+      tabForCalend.push(o);
+    }
+  }
+  displayDate(tabForCalend)
 });
 
 
@@ -151,157 +163,26 @@ document.getElementById('buttonReservation').addEventListener("click", event => 
     console.log('erreur');
 });
 
-const containerHeight = 400;
-const containerWidth = 620;
-const minutesinDay = 60 * 12;
-let collisions = [];
-let width = [];
-let leftOffSet = [];
-
-
-// ------ code du calendrier basé sur https://www.cssscript.com/day-view-calendar-vanilla-javascript/
-// append one event to calendar
-var createEvent = (height, top, left, units) => {
-
-  let node = document.createElement("DIV");
-  node.className = "event";
-  node.innerHTML = 
-  "<span class='title'> Réservé - </span><span class='location'> Nom Prénom </span>";
-
-  // Customized CSS to position each event
-  
-  node.style.width = (containerWidth/units) + "px";
-  node.style.height = height + "px";
-  node.style.top = top + 85 + "px";
-  node.style.left = 500 + left + "px";
-
-  document.getElementById("events").appendChild(node);
-}
-
-/* 
-collisions is an array that tells you which events are in each 30 min slot
-- each first level of array corresponds to a 30 minute slot on the calendar 
-  - [[0 - 30mins], [ 30 - 60mins], ...]
-- next level of array tells you which event is present and the horizontal order
-  - [0,0,1,2] 
-  ==> event 1 is not present, event 2 is not present, event 3 is at order 1, event 4 is at order 2
-*/
-
-function getCollisions (events) {
-
-  //resets storage
-  collisions = [];
-
-  for (var i = 0; i < 24; i ++) {
-    var time = [];
-    for (var j = 0; j < events.length; j++) {
-      time.push(0);
-    }
-    collisions.push(time);
+function displayDate(tabForCalend){
+  let tab = [];
+  for(let i = 0 ; i< tabForCalend.length ; i++) {
+      console.log(tabForCalend[i]);
+      let dateStart = new Date(tabForCalend[i].start)
+      let dateEnd = new Date(tabForCalend[i].end)
+      console.log(dateEnd)
+      let totalStart = 0;
+      totalStart = (dateStart.getHours() * 60 + dateStart.getMinutes()) - 480
+      let totalEnd = 0;
+      totalEnd = dateEnd.getHours() * 60 + dateEnd.getMinutes()- 480;
+      console.log({start: totalStart, end: totalEnd})
+      tab.push({start: totalStart, end: totalEnd})
   }
-
-  events.forEach((event, id) => {
-    let end = event.end;
-    let start = event.start;
-    let order = 1;
-
-    while (start < end) {
-      timeIndex = Math.floor(start/30);
-
-      while (order < events.length) {
-        if (collisions[timeIndex].indexOf(order) === -1) {
-          break;
-        }
-        order ++;
-      }
-
-      collisions[timeIndex][id] = order;
-      start = start + 30;
-    }
-
-    collisions[Math.floor((end-1)/30)][id] = order;
-  });
-};
-
-/*
-find width and horizontal position
-
-width - number of units to divide container width by
-horizontal position - pixel offset from left
-*/
-function getAttributes (events) {
-
-  //resets storage
-  width = [];
-  leftOffSet = [];
-
-  for (var i = 0; i < events.length; i++) {
-    width.push(0);
-    leftOffSet.push(0);
-  }
-
-  collisions.forEach((period) => {
-
-    // number of events in that period
-    let count = period.reduce((a,b) => {
-      return b ? a + 1 : a;
-    })
-
-    if (count > 1) {
-      period.forEach((event, id) => {
-        // max number of events it is sharing a time period with determines width
-        if (period[id]) {
-          if (count > width[id]) {
-            width[id] = count;
-          }
-        }
-
-        if (period[id] && !leftOffSet[id]) {
-          leftOffSet[id] = period[id];
-        }
-      })
-    }
-  });
-};
-
-var layOutDay = (events) => {
-
-// clear any existing nodes
-var myNode = document.getElementById("events");
-myNode.innerHTML = '';
-
-  getCollisions(events);
-  getAttributes(events);
-
-  events.forEach((event, id) => {
-    let height = (event.end - event.start) / minutesinDay * containerHeight;
-    let top = event.start / minutesinDay * containerHeight; 
-    let end = event.end;
-    let start = event.start;
-    let units = width[id];
-    if (!units) {units = 1};
-    let left = (containerWidth / width[id]) * (leftOffSet[id] - 1) + 110;
-    if (!left || left < 0) {left = 20};
-    createEvent(height, top, left, units);
-  });
-}
-
 //default events given
-const events = [ {start: 30, end: 150}, {start: 610, end: 670} ];
+
+let events = [ {start: 30, end: 150}, {start: 540, end: 600}, {start: 560, end: 620}, {start: 660, end: 700} ];
 
 layOutDay(events);
-
-//function to generate mock events for testing
-function generateMockEvents (n) {
-  let events = [];
-  let minutesInDay = 60 * 12;
-
-  while (n > 0) {
-    let start = Math.floor(Math.random() * minutesInDay)
-    let end = start + Math.floor(Math.random() * (minutesInDay - start));
-    events.push({start: start, end: end})
-    n --;
-  }
-
-  return events;
 }
+
+
+
