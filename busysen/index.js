@@ -32,6 +32,7 @@ main().catch(console.error)
 
 const states = require('./back/modules/states');
 const Theoden = require('./back/models/Theoden');
+const { cp } = require('fs');
 
 /**** Project configuration ****/
 
@@ -70,6 +71,15 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/front/html/login.html');
   } else {
     res.sendFile(__dirname + '/front/html/index.html');
+  }
+});
+
+app.get('/new', body('new').isLength({ min: 3 }).trim().escape(), (req, res) => {
+  let sessionData = req.session;
+  if (!sessionData.username) {
+    res.sendFile(dirname + '/front/html/login.html');
+  } else {
+    res.sendFile(dirname + '/front/html/new.html');
   }
 });
 
@@ -125,8 +135,8 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
     //return res.status(400).json({ errors: errors.array() });
   } else {
     // Store login
-    const result = await signIn(client, {email: login, password: password});
-    if(result == -2){
+    const result = await signIn(client, { email: login, password: password });
+    if (result == -2) {
       res.send('wrong_mdp');
     }
     else if(result == -1){
@@ -142,8 +152,7 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
   }
 });
 
-app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
-  const login = req.body.login
+app.post('/register', body('login').isLength({ min: 3 }).trim().escape(), async (req, res) => {  const login = req.body.login
   const password = req.body.password
 
   // Error management
@@ -153,11 +162,9 @@ app.post('/register', body('register').isLength({ min: 3 }).trim().escape(), (re
     //return res.status(400).json({ errors: errors.array() });
   } else {
     
-    //PRB ERREUR AU DESSUS ET PRB AWAIT EN DESSOUS !
+    const result = await signUp(client, { email: login, password: password });
 
-    // Store login
-    //const result = await signUp(client, {email: login, password: password});
-    if(result == -1){
+    if (result == -1) {
       res.send('already_exist');
     }
     else {
@@ -199,6 +206,35 @@ io.on('connection', (socket) => {
     let object = await getDataRoom(client, nameRoom);
     console.log(object)
     socket.emit("getDataRoom2", object,nameRoom);
+  });
+  
+  socket.on("Reservation", async (date1,date2,salle) => {
+    //let object = {number : salle, reservations : { start : date1, end : date2, id : "test", _id: new BSON.ObjectId()}};
+    //console.log(object)
+    //await newReservation(client, object)
+    console.log(salle);
+    await newReservation(client,{
+      name : salle,
+      reservations : {
+          start: date2,
+          end : date1,
+          idClient: socket.handshake.session.username,
+          _id: new BSON.ObjectId()
+    }});
+  });
+
+  socket.on("create_etage", async (salles) => {
+    console.log(salles)
+    for (let i = 0; i < salles.length; i++) {
+      //console.log(salles[i])
+      if(await createRoom(client, salles[i]) == -1) {
+        console.log(salles[i]);
+        socket.emit('erreur_crea_etage',salles[i].name);
+      }else {
+        await createRoom(client, salles[i]);
+        socket.emit('valid');
+      }
+    }
   });
 
 });
@@ -286,7 +322,7 @@ async function newReservation(client, data){
   roomData.reservations.push(data.reservations);
   //console.log(roomData)
   if(!roomData) return -1;
-  const result  = await client.db("Projet-Info").collection("Rooms").updateOne({number:data.number},{$set:roomData})
+  const result  = await client.db("Projet-Info").collection("Rooms").updateOne({name:data.name},{$set:roomData})
   return 0;
 }
 
@@ -308,5 +344,13 @@ async function signUp(client,data){
   if(result) return -1;
   await client.db("Projet-Info").collection("Users").insertOne(data);
   //se loger
+  return 0;
+}
+
+async function createRoom(client, data) {
+  const test = await client.db("Projet-Info").collection("Rooms").findOne({ name: data.name });
+  console.log(test);
+  if (test) return -1;
+  const result = await client.db("Projet-Info").collection("Rooms").insertOne(data);
   return 0;
 }
