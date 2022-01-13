@@ -22,7 +22,7 @@
 	 - _direct : Bool�en permettant de dire si les rectangles de mise en �vidence doivent appara�tre directement ou bien lors du passage de la souris sur la zone.
 	 - _resize : Bool�en permettant de dire si les rectangles de mise en �vidence doivent s'adapter � un �ventuellement changement de taille de l'image.
 */
-function MapHighlight(_img,index, _persistent, _direct, _resize) {
+function MapHighlight2(_img,index, _persistent, _direct, _resize) {
 	var img = _img;
 	var persistent = _persistent;
 	var direct = _direct;

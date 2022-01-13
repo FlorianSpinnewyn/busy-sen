@@ -2,7 +2,7 @@
 
 if (document.getElementById("GoHome")) {
   document.getElementById("GoHome").addEventListener("click", event => {
-    socket.emit("Redirection", "/index", false);
+    socket.emit("Redirection", "/index/0", false);
   });
 }
 

@@ -33,10 +33,16 @@ day.setMinutes(0);
 day.setSeconds(0);
 
 //Creation de la page suivant l'étage
-let level = parseInt(window.location.href[window.location.href.length - 1]);
+//let level = parseInt(window.location.href[window.location.href.length - 1]);
+let level = -1;
+
+console.log(level)
 
 addPlan(level);
-socket.emit("actuPlan", day, level);
+sleep(1000).then(() => {
+  socket.emit("actuPlan", day, level);
+});
+
 
 //Actu du slider
 slider.oninput = function() {

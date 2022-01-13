@@ -78,7 +78,10 @@ app.get('/new', body('new').isLength({ min: 3 }).trim().escape(), (req, res) => 
   let sessionData = req.session;
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
-  } else {
+  } 
+  else if(!sessionData.admin){
+    res.sendFile(__dirname + '/front/html/profil.html');
+  }else{
     res.sendFile(__dirname + '/front/html/new.html');
   }
 });
@@ -144,6 +147,7 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
     }
     else {
       console.log("Connexion : ", login, " ", password)
+      if(result == 1) req.session.admin = 1;
       req.session.username = login;
       req.session.save()
       res.redirect('/');
@@ -241,10 +245,29 @@ io.on('connection', (socket) => {
     socket.emit('reservation_client', await getDataUser(client, socket.handshake.session.username),socket.handshake.session.username);
   });
 
-  socket.on("supp_reservation", async (idRoom,idReservations) => {
-    socket.emit('supp_client_reservation_bdd', await removeReservation(client,idRoom,idReservations));
-    console.log("Suppresion Reservation");
+  socket.on("supp_reservation", async (name, idReservations) => {
+    console.log("Suppresion Reservation", name, idReservations);
+    await removeReservation(client, name, idReservations);
   });
+
+  socket.on('image_serv', async (etage, image) => {
+    if (await createLevel(client, { name: etage, img: image })) socket.emit('err_create_bdd');
+    else await createLevel(client, { name: etage, img: image });
+
+  });
+
+  socket.on('get_img_etage', async (level) => {
+    socket.emit('img-lvl', await getLevel(client, level));
+    socket.emit('infos-rooms-custom', await getRoomCustom(client, level));
+  });
+
+  socket.on('recup_nb_lvl' , async (lvl) => {
+        while(await getLevel(client,lvl)) {
+          lvl++;
+        }
+        console.log(lvl);
+        socket.emit('found-nb-lvl',lvl);
+  })
 
   socket.on("filtrer",async (date,time,minutes,capacity,projector)=>{
     console.log(date)
@@ -267,6 +290,14 @@ io.on('connection', (socket) => {
     result.forEach(obj=>obj.reservations = obj.reservations.filter(e=>e.start >= date1 && e.end <= date2));
     console.log(result)
     socket.emit("filtered",result)
+  });
+
+  socket.on("isAdmin",async ()=>{
+    if(socket.handshake.admin) {
+      socket.emit('admin');
+    }else {
+      socket.emit('no-admin');
+    }
   });
 
 });
@@ -358,8 +389,8 @@ async function newReservation(client, data){
   return 0;
 }
 
-async function removeReservation(client, idRoom,idReservations){
-  const result = await client.db("Projet-Info").collection("Rooms").update({ _id : idRoom },{$pull : {reservations: {_id:idReservations}}});
+async function removeReservation(client, nameRoom, idReservations) {
+  await client.db("Projet-Info").collection("Rooms").updateOne({ name: nameRoom }, { $pull: { reservations: { _id: new BSON.ObjectID(idReservations) } } });
 }
 
 async function signIn(client,data){
@@ -368,6 +399,7 @@ async function signIn(client,data){
   if(!user) return -1;
   if(data.password != user.password) return -2;
   //se loger
+  if(user.admin) return 1;
   return 0;
 }
 
@@ -391,4 +423,21 @@ async function filterData(client, {capacity: capacity =20,projector:projector = 
   const cursor = await client.db("Projet-Info").collection("Rooms").find({capacity:{$gte : capacity},projector:{$gte : projector}});
   return await cursor.toArray()
 
+}
+
+async function createLevel(client, data) {
+  const test = await client.db("Projet-Info").collection("CustomLevels").findOne({ name: data.name });
+  if (test) return -1;
+  const result = await client.db("Projet-Info").collection("CustomLevels").insertOne(data);
+  //console.log(result);
+  return 0;
+}
+
+async function getLevel(client, level) {
+  return await client.db("Projet-Info").collection("CustomLevels").findOne({ name: level });
+}
+
+async function getRoomCustom(client, level) {
+  const cursor = await client.db("Projet-Info").collection("Rooms").find({ level: level });
+  return await cursor.toArray();
 }
