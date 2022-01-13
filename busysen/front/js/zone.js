@@ -34,7 +34,8 @@ function updateImageDisplay() {
                 image.src = window.URL.createObjectURL(curFiles[i]);
                 imageTT = image.src;
                 //document.getElementById("etagenb").hidden = false;
-                document.getElementById("text_top").style.display = "none";;
+                document.getElementById("text_top").style.display = "none";
+                console.log("aaaa");
                 document.getElementById("selectionSalle").style.display = "block";
 
             } else {
@@ -77,7 +78,7 @@ if (imgNew != null && verif == false) {
             etage = lvl;
         document.getElementById("valider").hidden = false;
         document.getElementById("etage2").innerHTML = etage;
-        document.getElementById("selectionSalle").hidden = false;
+
 
         imgNew.addEventListener('click', (event) => {
             //console.log(event.clientX, event.clientY);
@@ -172,11 +173,11 @@ if (imgNew != null && verif == false) {
 
                         });
 
-                        socket.on('valid', (salles) => {
-                            //console.log(salles, levelnew);
+                        socket.on('valid', () => {
+                            console.log(salles, levelnew);
                             //document.getElementById("popup").hidden = false;
                             window.alert("L'étage à bien été créé !");
-                            window.location.href='./index/' + salles.level;
+                            window.location.href='./index/' + etage;
                             document.getElementsByName("img").disabled = true;
                             document.getElementById("selectionSalle2").hidden = true;
                         })

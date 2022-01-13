@@ -104,10 +104,6 @@ box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   float: right;
 }
 
-.buttonCancel:hover{
-  cursor: pointer;
-}
-
 .fenetre {
   position: fixed;
   top: 3.2rem;
@@ -123,7 +119,7 @@ box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   background-repeat: no-repeat;
 }
 
-#buttonReservation {
+#buttonReservation, #validation {
   border: none;
   color: white;
   text-align: center;
@@ -137,7 +133,7 @@ box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
   border: 2px solid #f44336;
 }
 
-#buttonReservation:hover {
+#buttonReservation:hover, #validation:hover, .buttonCancel:hover {
   background-color: #f44336;
   color: white;
 }

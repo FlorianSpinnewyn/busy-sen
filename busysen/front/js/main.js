@@ -191,7 +191,7 @@ document.getElementById('niveauPlus').addEventListener("click", event => {
 
 
 document.getElementById('niveauMoins').addEventListener("click", event => {
-  
+  document.location.href='/index/' + (parseInt(document.location.href[(document.location.href.indexOf("index/"))+("index/".length)])-1);
 });
 
 let heuredebut = document.getElementById('debut');
