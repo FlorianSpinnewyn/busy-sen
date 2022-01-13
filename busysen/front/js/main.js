@@ -34,7 +34,7 @@ day.setSeconds(0);
 //Creation de la page suivant l'étage
 let level = parseInt(window.location.href[window.location.href.length - 1]);
 
-addPlan(level)
+addPlan(level);
 socket.emit("actuPlan", day, level);
 
 //Actu du slider
@@ -45,13 +45,13 @@ slider.oninput = function() {
 }
 
 //date en jour
-displayDate(day)
+afficheDate(day)
 
 document.getElementById("levelActu").innerHTML = level;
 
 
 //Affichage des salle dispo
-socket.on("actuPlan2", (freeRooms) => {
+socket.on("actuPlan2",   (freeRooms) => {
   for(let i = 0; i<rooms[level+1].length;i++) {
     document.getElementById(rooms[level+1][i][0]).style.borderColor ='red' ;
   }
@@ -145,7 +145,8 @@ document.getElementById('niveauMoins').addEventListener("click", event => {
 let heuredebut = document.getElementById('debut');
 let heureFin = document.getElementById('fin');
 
-document.getElementById('buttonReservation').addEventListener("click", event => {
+document.getElementById('formReservation').addEventListener("submit", event => {
+  event.preventDefault();
   let firstDateReservee = new Date(+day);
   let secondDateReservee = new Date(+firstDateReservee);
   firstDateReservee.setHours(heuredebut.value[0] + heuredebut.value[1])
@@ -154,7 +155,10 @@ document.getElementById('buttonReservation').addEventListener("click", event => 
   secondDateReservee.setMinutes(heureFin.value[3] + heureFin.value[4])
   console.log(heuredebut.value,heureFin.value)
   console.log(firstDateReservee,secondDateReservee,day)
-
+  secondDateReservee.setSeconds(0);
+  secondDateReservee.setMilliseconds(0);
+  firstDateReservee.setSeconds(0);
+  firstDateReservee.setMilliseconds(0);
   if(secondDateReservee > firstDateReservee){
     socket.emit("Reservation", secondDateReservee.getTime(),firstDateReservee.getTime(), tmp)
     window.location.href='/index/' + level;
@@ -175,14 +179,14 @@ function displayDate(tabForCalend){
       let totalEnd = 0;
       totalEnd = dateEnd.getHours() * 60 + dateEnd.getMinutes()- 480;
       console.log({start: totalStart, end: totalEnd})
-      tab.push({start: totalStart, end: totalEnd})
+      tab.push({start: totalStart, end: totalEnd, name : tabForCalend[i].idClient})
   }
-//default events given
 
-let events = [ {start: 30, end: 150}, {start: 540, end: 600}, {start: 560, end: 620}, {start: 660, end: 700} ];
-
-layOutDay(events);
+  const events = [ { start: 360, end: 540, name: "test@test" }, { start: 30, end: 150, name: "test@test" } ];
+  console.log(events, tab);
+  layOutDay(tab);
 }
+
 
 
 

@@ -1,23 +1,24 @@
-const containerHeight = 400;
-const containerWidth = 620;
-const minutesinDay = 60 * 15;
+const containerHeight = 720;
+const containerWidth = 600;
+const minutesinDay = 60 * 13;
 let collisions = [];
 let width = [];
 let leftOffSet = [];
 
 // append one event to calendar
-var createEvent = (height, top, left, units) => {
+var createEvent = (height, top, left, units,login) => {
 
   let node = document.createElement("DIV");
   node.className = "event";
   node.innerHTML = 
-  "<span class='title'> Réservé - </span><span class='location'> Nom Prénom </span>";
+  "<span class='title'> Sample Item </span> \
+  <br><span class='location'> "+  login + " </span>";
 
   // Customized CSS to position each event
   node.style.width = (containerWidth/units) + "px";
   node.style.height = height + "px";
-  node.style.top = top + 85 + "px";
-  node.style.left = 500 + left + "px";
+  node.style.top = top + "px";
+  node.style.left = 100 + left + "px";
 
   document.getElementById("events").appendChild(node);
 }
@@ -122,10 +123,11 @@ myNode.innerHTML = '';
     let top = event.start / minutesinDay * containerHeight; 
     let end = event.end;
     let start = event.start;
+    let login = event.name;
     let units = width[id];
     if (!units) {units = 1};
     let left = (containerWidth / width[id]) * (leftOffSet[id] - 1) + 10;
     if (!left || left < 0) {left = 10};
-    createEvent(height, top, left, units);
+    createEvent(height, top, left, units,login);
   });
 }

@@ -51,3 +51,14 @@ function displayDate(date){
 
 
 
+function afficheDate(date){
+    var nodeDate = document.getElementById("today");
+
+    let dateLocale = date.toLocaleString('fr-FR',{
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'});
+
+    nodeDate.innerHTML = dateLocale;
+}
