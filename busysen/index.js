@@ -238,7 +238,7 @@ io.on('connection', (socket) => {
         socket.emit('erreur_crea_etage',salles[i].name);
       }else {
         await createRoom(client, salles[i]);
-        socket.emit('valid');
+        socket.emit('valid',salles[i]);
       }
     }
   });

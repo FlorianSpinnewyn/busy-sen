@@ -171,11 +171,11 @@ if (imgNew != null && verif == false) {
 
                         });
 
-                        socket.on('valid', () => {
-                            console.log(salles, levelnew);
+                        socket.on('valid', (salles) => {
+                            //console.log(salles, levelnew);
                             //document.getElementById("popup").hidden = false;
                             window.alert("L'étage à bien été créé !");
-                            window.location.href='./index/' + etage;
+                            window.location.href='./index/' + salles.level;
                             document.getElementsByName("img").disabled = true;
                             document.getElementById("selectionSalle2").hidden = true;
                         })
