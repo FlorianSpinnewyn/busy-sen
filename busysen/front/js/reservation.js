@@ -11,6 +11,10 @@ document.getElementById("GoHome").addEventListener("click", event => {
 document.getElementById('cancel').addEventListener("click", event => {
     document.getElementById('supprReservation').hidden = true;
 });
+document.getElementById("logOut").addEventListener("click", e => {
+    e.preventDefault();
+    window.location.href="/login";
+});
 
 socket.on("Redirection2", data => {
     document.location.href = data;

@@ -23,6 +23,7 @@ socket.on("filtered",result=>{
     if(count !=0){
         liste.removeChild(liste.children[0]);
     }
+
     let p = document.createElement("p");
 
     liste.appendChild(p);

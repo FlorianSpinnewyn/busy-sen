@@ -33,8 +33,9 @@ function updateImageDisplay() {
                 var image = document.querySelector('img');
                 image.src = window.URL.createObjectURL(curFiles[i]);
                 imageTT = image.src;
-                document.getElementById("etagenb").hidden = false;
-                document.getElementById("text_top").hidden = true;
+                //document.getElementById("etagenb").hidden = false;
+                document.getElementById("text_top").style.display = "none";;
+                document.getElementById("selectionSalle").style.display = "block";
 
             } else {
                 para.textContent = "Erreur"
@@ -116,7 +117,7 @@ if (imgNew != null && verif == false) {
                 mh.highlight();
 
                 document.getElementById("form_new").hidden = false;
-                document.getElementById("selectionSalle").hidden = true;
+                document.getElementById("selectionSalle").style.display = "none";
 
                 verif = true;
 
