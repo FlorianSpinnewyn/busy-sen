@@ -12,6 +12,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <link rel="stylesheet" href="../css/index.css">
   <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 
 <body>
@@ -25,7 +26,7 @@
         <button id="GoReservation" class="w3-block btn">Mes Réservations</button>
       </div>
       <div class="w3-col s3">
-        <button id="GoProfil" class="w3-block btn">Profil</button>
+        <button id="GoNew" class="w3-block btn">Profil</button>
       </div>
       <div class="w3-col s1 tooltip">
         <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out btn2"
@@ -34,7 +35,41 @@
       </div>
     </div>
   </div>
+  <div class="w3-row-padding" id="about">
 
+      <div class="w3-card-4 w3-margin-bottom w3-col s6 " id="divFiltrer">
+        <ul class="w3-ul w3-border w3-center">
+          <li class="w3-xlarge" style="background-color:#363636"><p style="color:white">Recherche</p></li>
+          <label for="dateFiltre">Date de réservation:</label>
+          <input type="date" id="dateFiltre" name="date"
+                 min="2021-09-01" max="2022-09-01" required/><br>
+
+          <label for="timeFiltre">Heure de réservation:</label>
+          <input type="time" id="timeFiltre" name="time"
+                 min="08:00" max="21:00"/><br>
+
+          <label for="capacity">Capacité :</label>
+          <input type="number" id="capacity" name="capacity"
+                 min="1" max="150"><br>
+
+
+          <i class="material-icons" style="font-size:36px">videocam</i>
+          <label class="container">Vidéo Projecteur
+            <input type="checkbox" id="vid">
+            <span class="checkmark"></span>
+          </label><br>
+
+          <input id="buttonSearch" type="submit" value="Rechercher" /><br>
+        </ul>
+      </div>
+
+  </div>
+
+  </div>
+
+  <div id="liste">
+
+  </div>
   <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
     <div class="w3-container">
       <div class="w3-display-container mySlides" id="plan"></div>
@@ -56,7 +91,7 @@
     <!-- Date -->
     <div class="w3-bar w3-border">
       <button id="dateMoins" class="w3-button w3-border-right w3-hover-red" disabled>&#10094;</button>
-      <span id="today"></span>
+      <span id="today" style="margin-left:28.5rem;"></span>
       <button id="datePlus" class="w3-button w3-border-left w3-right w3-hover-red">&#10095;</button>
     </div>
 
@@ -118,14 +153,14 @@
         <p>etage : <span id="SelectRoomEtage"></span></p>
         <p>Projecteur : <span id="SelectRoomProj"></span></p>
         
-        <form id="formReservation">
+
           <p>A quelle heure voulez-vous reserver?
             de <input type="time" id="debut" name="appt" min="08:00" max="20:00" required> à
             <input type="time" id="fin" name="appt" min="08:00" max="20:00" required>
           </p>
-          <button type="submit" style="margin-left:64rem;margin-bottom:1rem;" id="buttonReservation">Reserver</button>
+          <button style="margin-left:64rem;margin-bottom:1rem;" id="buttonReservation">Reserver</button>
 
-        </form>
+
       </div>
     </div>
   </div>
@@ -141,7 +176,13 @@
 
 <script>
   let socket = io();
+
+  socket.emit('isAdmin');
+  socket.on('no-admin',()=>{
+    document.getElementById('GoNew').disabled=true;
+  })
 </script>
+<script src="../js/form.js"></script>
 <script src="../js/script.js"></script>
 <script src="../js/MapHighlight.js"></script>
 <script src="../js/rooms.js"></script>

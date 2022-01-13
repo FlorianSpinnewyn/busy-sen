@@ -194,3 +194,29 @@ color: white;
   color: #f44336;
   font-size: 200%;
 }
+
+#divFiltrer{
+  margin-left:25%;
+  margin-top: 7%;
+}
+
+#dateFiltre,#timeFiltre,#capacity{
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#buttonSearch{
+
+  background-color: #111010;
+  color: white;
+  padding: 7px 10px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#buttonSearch:hover{
+  background-color: rgb(187, 180, 180);
+}

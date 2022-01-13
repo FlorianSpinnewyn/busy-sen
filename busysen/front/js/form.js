@@ -1,10 +1,10 @@
-let form = document.getElementById('formFiltre');
+
 let search = document.getElementById('buttonSearch');
+let count=0;
 
-
-form.addEventListener("submit", (e) =>{
-    let date = document.getElementById('date').value;
-    let time = document.getElementById('time').value;
+search.addEventListener("click", (e) =>{
+    let date = document.getElementById('dateFiltre').value;
+    let time = document.getElementById('timeFiltre').value;
     time=time.split(':');
     let capacity = document.getElementById('capacity').value;
     let projector = document.getElementById('vid').checked;
@@ -18,15 +18,18 @@ form.addEventListener("submit", (e) =>{
 });
 
 socket.on("filtered",result=>{
-    console.log(result);
     let liste = document.getElementById('liste');
-    console.log(liste);
+
+    if(count !=0){
+        liste.removeChild(liste.children[0]);
+    }
     let p = document.createElement("p");
-    console.log(p);
+
     liste.appendChild(p);
     p.textContent = "Les salles disponibles correspondant à votre recherche sont : "
     for(let i=0; i<result.length-1; i++){
         p.textContent += result[i].name + ", ";
     }
     p.textContent += result[result.length-1].name;
+    count++;
 });
