@@ -2,9 +2,11 @@
 socket.emit('login', '');
 
 // Redirection
-document.getElementById("GoProfil").addEventListener("click", event => {
-    socket.emit("Redirection","/profil", false);
+document.getElementById("GoNew").addEventListener("click", e => {
+  e.preventDefault();
+  window.location.href = "/new";
 });
+
 document.getElementById("GoReservation").addEventListener("click", event => {
   socket.emit("Redirection","/reservation", false);
 });
@@ -34,7 +36,7 @@ day.setSeconds(0);
 
 //Creation de la page suivant l'étage
 //let level = parseInt(window.location.href[window.location.href.length - 1]);
-let level = -1;
+let level = parseInt(document.location.href[(document.location.href.indexOf("index/"))+("index/".length)]);
 
 console.log(level)
 
@@ -43,6 +45,8 @@ sleep(1000).then(() => {
   socket.emit("actuPlan", day, level);
 });
 
+
+console.log(rooms)
 
 //Actu du slider
 slider.oninput = function() {
@@ -57,17 +61,19 @@ afficheDate(day)
 document.getElementById("levelActu").innerHTML = level;
 
 function settimer(freeRooms) {
+  if(level > 6) level = 7;
   console.log("les salles libre a ", day ," sont ", freeRooms);
-  console.log(document.getElementById("containerPlanning"))
-  for(let i = 0; i<rooms[level+1].length;i++) {
-    console.log(rooms[level+1][i][0]);
-    document.getElementById(rooms[level+1][i][0]).style.borderColor ='red' ;
+  console.log(document.getElementById("containerPlanning"));
+  
+  for(let i = 0; i<rooms[level].length;i++) {
+    console.log(rooms[level][i][0]);
+    document.getElementById(rooms[level][i][0]).style.borderColor ='red' ;
   }
   for( let i = 0; i<freeRooms.length;i++) { 
     document.getElementById(freeRooms[i]).style.borderColor ='green' ;
   }
-  for(let i = 0; i<rooms[level+1].length;i++) {
-    document.getElementById(rooms[level+1][i][0]).style.transform = "rotate( " + rooms[level+1][i][2] + "deg)"
+  for(let i = 0; i<rooms[level].length;i++) {
+    document.getElementById(rooms[level][i][0]).style.transform = "rotate( " + rooms[level][i][2] + "deg)"
   }
   console.log("aaaaaaaaaaa")
 }
@@ -179,19 +185,19 @@ document.getElementById('dateMoins').addEventListener("click", event => {
 });
 
 document.getElementById('niveauPlus').addEventListener("click", event => {
-  document.location.href='/index/' + (level+1);
+  document.location.href='/index/' + (parseInt(document.location.href[(document.location.href.indexOf("index/"))+("index/".length)])+1);
 });
 
 
 
 document.getElementById('niveauMoins').addEventListener("click", event => {
-  document.location.href='/index/' + (level-1);
+  document.location.href='/index/' + (parseInt(document.location.href[(document.location.href.indexOf("index/"))+("index/".length)])-1);
 });
 
 let heuredebut = document.getElementById('debut');
 let heureFin = document.getElementById('fin');
 
-document.getElementById('formReservation').addEventListener("submit", event => {
+document.getElementById('buttonReservation').addEventListener("click", event => {
   event.preventDefault();
   let firstDateReservee = new Date(+day);
   let secondDateReservee = new Date(+firstDateReservee);

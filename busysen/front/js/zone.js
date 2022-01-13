@@ -69,12 +69,11 @@ let tab_area = [];
 let attention = "<i class='fa fa-exclamation-triangle' style='color:#f44336;' aria-hidden='true'></i>"
 
 if (imgNew != null && verif == false) {
-        etage = 6;
+        etage = 7;
         socket.emit('recup_nb_lvl', etage);
 
         socket.on('found-nb-lvl', lvl => {
             etage = lvl;
-        document.getElementById("etagenb").hidden = true;
         document.getElementById("valider").hidden = false;
         document.getElementById("etage2").innerHTML = etage;
         document.getElementById("selectionSalle").hidden = false;
@@ -176,7 +175,7 @@ if (imgNew != null && verif == false) {
                             console.log(salles, levelnew);
                             //document.getElementById("popup").hidden = false;
                             window.alert("L'étage à bien été créé !");
-                            window.location.href='./index';
+                            window.location.href='./index/' + etage;
                             document.getElementsByName("img").disabled = true;
                             document.getElementById("selectionSalle2").hidden = true;
                         })

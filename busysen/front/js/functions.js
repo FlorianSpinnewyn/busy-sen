@@ -2,12 +2,12 @@ function addPlan(level) { //ajout du plan et init des salle sur index
 
     let string = ""
 
-    if (level < 6 && level >= -1) {
+    if (level <= 6) {
         string = "<div><img src='../images/" + level + ".png' usemap='#image-map'> <map name='image-map'>";
 
-        for (let i = 0; i < rooms[level + 1].length; i++) {
-            string = string + "<area shape='rect' class='occuped' href='#!' title='rect' alt='rect' coords='" + rooms[level + 1][i][1] + "' shape='rect' id='A" + rooms[level + 1][i][0] + "'>";
-            console.log(rooms[level + 1][i])
+        for (let i = 0; i < rooms[level].length; i++) {
+            string = string + "<area shape='rect' class='occuped' href='#!' title='rect' alt='rect' coords='" + rooms[level][i][1] + "' shape='rect' id='A" + rooms[level][i][0] + "'>";
+            console.log(rooms[level][i])
 
 
         }
@@ -19,13 +19,13 @@ function addPlan(level) { //ajout du plan et init des salle sur index
         var mh = new MapHighlight(document.getElementsByTagName('img')[0], true, true, true);
         mh.highlight();
 
-        for (let i = 0; i < rooms[level + 1].length; i++) {
+        for (let i = 0; i < rooms[level].length; i++) {
             var sheet = window.document.styleSheets[3];
-            sheet.insertRule('#' + rooms[level + 1][i][0] + ' { transform: rotate( ' + rooms[level + 1][i][2] + 'deg); }', sheet.cssRules.length);
-            document.getElementById("A" + rooms[level + 1][i][0]).addEventListener("click", e => {
+            sheet.insertRule('#' + rooms[level][i][0] + ' { transform: rotate( ' + rooms[level][i][2] + 'deg); }', sheet.cssRules.length);
+            document.getElementById("A" + rooms[level][i][0]).addEventListener("click", e => {
                 document.getElementById('emploie').hidden = false;
-                document.getElementById('SelectRoom').innerHTML = rooms[level + 1][i][0];
-                socket.emit("getDataRoom", rooms[level + 1][i][0]);
+                document.getElementById('SelectRoom').innerHTML = rooms[level][i][0];
+                socket.emit("getDataRoom", rooms[level][i][0]);
             });
         }
     } else {
@@ -61,18 +61,19 @@ function addPlan(level) { //ajout du plan et init des salle sur index
 
                 //Data dans rooms
                 let etageTmp = [];
-
+                console.log(data2)
                 for(let i = 0; i< data2.length ; i++) {
                     etageTmp.push([data2[i].name, data2[i].coords[0], 0 ]);
                 }
-
+                level = 7;
                 rooms.push(etageTmp);
-
-                for (let i = 0; i < rooms[level + 1].length; i++) {
-                    document.getElementById("A" + rooms[level + 1][i][0]).addEventListener("click", e => {
+                console.log(rooms)
+                console.log(level)
+                for (let i = 0; i < rooms[level].length; i++) {
+                    document.getElementById("A" + rooms[level][i][0]).addEventListener("click", e => {
                         document.getElementById('emploie').hidden = false;
-                        document.getElementById('SelectRoom').innerHTML = rooms[level + 1][i][0];
-                        socket.emit("getDataRoom", rooms[level + 1][i][0]);
+                        document.getElementById('SelectRoom').innerHTML = rooms[level][i][0];
+                        socket.emit("getDataRoom", rooms[level][i][0]);
                     });
                 }
 

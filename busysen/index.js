@@ -79,21 +79,19 @@ app.get('/new', body('new').isLength({ min: 3 }).trim().escape(), (req, res) => 
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
   } 
-  else if(!sessionData.admin){
-    res.sendFile(__dirname + '/front/html/profil.html');
-  }else{
+  else{
     res.sendFile(__dirname + '/front/html/new.html');
   }
 });
 
 app.get('/register', body('register').isLength({ min: 3 }).trim().escape(), (req, res) => {
   res.sendFile(__dirname + '/front/html/register.html');
-  req.session.username = undefined;
+  req.session.destroy();
 });
 
 app.get('/login', body('login').isLength({ min: 3 }).trim().escape(), (req, res) => {
   res.sendFile(__dirname + '/front/html/login.html');
-  req.session.username = undefined;
+  req.session.destroy();
 });
 
 app.get('/index/:tagId', function(req, res) {
@@ -156,7 +154,8 @@ app.post('/login', body('login').isLength({ min: 3 }).trim().escape(), async (re
   }
 });
 
-app.post('/register', body('login').isLength({ min: 3 }).trim().escape(), async (req, res) => {  const login = req.body.login
+app.post('/register', body('login').isLength({ min: 3 }).trim().escape(), async (req, res) => {  
+  const login = req.body.login
   const password = req.body.password
 
   // Error management
@@ -292,8 +291,9 @@ io.on('connection', (socket) => {
     socket.emit("filtered",result)
   });
 
-  socket.on("isAdmin",async ()=>{
-    if(socket.handshake.admin) {
+  socket.on("isAdmin", ()=>{
+    console.log(socket.handshake.session.admin);
+    if(socket.handshake.session.admin) {
       socket.emit('admin');
     }else {
       socket.emit('no-admin');

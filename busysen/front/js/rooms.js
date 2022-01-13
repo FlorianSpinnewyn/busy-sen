@@ -9,14 +9,7 @@ let etage4 = [];
 let etage5 = [];
 let room = new Object();
 
-/** Etage -1 */
-rooms.push(etage_1);
-//Salle A111
-etage_1.push(["A111","108,561,188,719", 0])
-//Salle A104
-etage_1.push(["A104","6,401,78,516", 0])
-//Salle A106
-etage_1.push(["A106","79,84,186,278", 0])
+
 
 
 /** Etage 0 */
@@ -152,6 +145,13 @@ rooms.push(etage5);
 //Salle C353
 etage5.push(["C353","973,519,1062,626", -6])
 
-console.log(rooms)
+/** Etage -1 */
+rooms.push(etage_1);
+//Salle A111
+etage_1.push(["A111","108,561,188,719", 0])
+//Salle A104
+etage_1.push(["A104","6,401,78,516", 0])
+//Salle A106
+etage_1.push(["A106","79,84,186,278", 0])
 
 

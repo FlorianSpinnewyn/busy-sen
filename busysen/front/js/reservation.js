@@ -1,7 +1,8 @@
 // Redirection
-document.getElementById("GoProfil").addEventListener("click", event => {
-    socket.emit("Redirection", "./profil", false);
-});
+document.getElementById("GoNew").addEventListener("click", e => {
+    e.preventDefault();
+    window.location.href = "/new";
+  });
 document.getElementById("GoHome").addEventListener("click", event => {
     socket.emit("Redirection", "./index/0", false);
 });
@@ -47,7 +48,8 @@ function createResTable(data1, data2, date, count) {
     let rowData1 = document.createElement('td');
     rowData1.innerHTML = data1;
     let rowData2 = document.createElement('td');
-    let para = document.createElement("a");
+    let para = document.createElement("div");
+    para.setAttribute("class", "infoAnnulation");
     rowBefore.after(row);
     row.appendChild(rowData1);
     row.appendChild(rowData2);
@@ -57,7 +59,7 @@ function createResTable(data1, data2, date, count) {
     buttonCancel.setAttribute("class", "buttonCancel");
     buttonCancel.setAttribute("id", count);
 
-    buttonCancel.innerHTML = "x";
+    buttonCancel.innerHTML = "Annuler sa réservation";
     rowData1.setAttribute("class", "horaire");
     rowData2.setAttribute("class", "infos");
 
@@ -115,9 +117,18 @@ socket.on('reservation_client', (data, user) => {
             row.setAttribute("id", days[date.getDay()] + date.getDate())
             rowData.className = "dateDay";
             rowData.setAttribute("colspan", "3");
-
-            createResTable(date.getHours() + "h - " + date2.getHours() + "h", "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
-
+            if(date.getMinutes() < 10 && date2.getMinutes() < 10 ){
+                createResTable(date.getHours() + "h0" + date.getMinutes() + " - " + date2.getHours() + "h0" + date2.getMinutes(), "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
+            }
+            else if(date.getMinutes() < 10 && date2.getMinutes() > 9 ){
+                createResTable(date.getHours() + "h0" + date.getMinutes() + " - " + date2.getHours() + "h" + date2.getMinutes(), "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
+            }
+            else if(date.getMinutes() > 9 && date2.getMinutes() < 10 ){
+                createResTable(date.getHours() + "h" + date.getMinutes() + " - " + date2.getHours() + "h0" + date2.getMinutes(), "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
+            }
+            else{
+                createResTable(date.getHours() + "h" + date.getMinutes() + " - " + date2.getHours() + "h" + date2.getMinutes(), "Etage : " + etage + " Salle : " + salle + " Capacité : " + capacity + " Projecteur : " + projector, days[date.getDay()] + date.getDate(), tabReservationsUser[i].reservations[j]._id);
+            }
 
         }
     }
