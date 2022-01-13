@@ -79,6 +79,9 @@ app.get('/new', body('new').isLength({ min: 3 }).trim().escape(), (req, res) => 
   if (!sessionData.username) {
     res.sendFile(__dirname + '/front/html/login.html');
   } 
+  else if(!sessionData.admin) {
+    res.sendFile(__dirname + '/front/html/login.html');
+  }
   else{
     res.sendFile(__dirname + '/front/html/new.html');
   }
