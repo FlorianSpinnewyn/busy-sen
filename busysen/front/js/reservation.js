@@ -84,24 +84,19 @@ socket.emit('get_reservation');
 
 socket.on('reservation_client', (data, user) => {
     tabReservationsUser = data;
-    console.log(data);
+    //console.log(data);
     let count = 0;
     for (let i = 0; i < tabReservationsUser.length; i++) {
         for (let j = 0; j < tabReservationsUser[i].reservations.length; j++) {
             let debut = tabReservationsUser[i].reservations[j].start;
-            let fin = tabReservationsUser[i].reservations[j].start;
+            let fin = tabReservationsUser[i].reservations[j].end;
             let salle = tabReservationsUser[i].name;
             let etage = tabReservationsUser[i].level;
             let capacity = tabReservationsUser[i].capacity;
             let projector = tabReservationsUser[i].projector;
 
-            let date = new Date(0);
-            date.setTime(debut);
-            date.setSeconds(debut);
-
-            let date2 = new Date(0);
-            date2.setTime(fin);
-            date2.setSeconds(fin);
+            let date = new Date(debut);
+            let date2 = new Date(fin);
 
             if (projector == 1) {
                 projector = "Oui";
@@ -131,11 +126,13 @@ socket.on('reservation_client', (data, user) => {
             //console.log(tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id);
             let btn = document.getElementById(tabReservationsUser[i].reservations[j]._id);
             btn.addEventListener('click', () => {
-                console.log(btn.id);
+                console.log(tabReservationsUser[i]);
                 let btn2 = document.getElementById('validation');
                 btn2.addEventListener('click', () => {
                     //console.log(tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id);
-                    socket.emit('supp_reservation', (tabReservationsUser[i]._id, tabReservationsUser[i].reservations[j]._id));
+
+                    socket.emit('supp_reservation', tabReservationsUser[i].name, tabReservationsUser[i].reservations[j]._id);
+
                     window.location.href = './reservation';
                 });
 
