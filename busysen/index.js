@@ -246,6 +246,29 @@ io.on('connection', (socket) => {
     console.log("Suppresion Reservation");
   });
 
+  socket.on("filtrer",async (date,time,minutes,capacity,projector)=>{
+    console.log(date)
+    console.log(time)
+    console.log(capacity)
+    console.log(projector)
+    console.log('time '+time);
+    let date1 = new Date(date);
+    date1.setHours(time)
+    date1.setMinutes(minutes);
+    date1 = date1.getTime();
+
+    let date2 = new Date(date);
+
+    date2.setDate(date2.getDate() +1);
+    date2 = date2.getTime();
+    console.log(date1,date2)
+    projector = projector ? 1:0;
+    let result = await filterData(client,{capacity:parseInt(capacity),projector:projector});
+    result.forEach(obj=>obj.reservations = obj.reservations.filter(e=>e.start >= date1 && e.end <= date2));
+    console.log(result)
+    socket.emit("filtered",result)
+  });
+
 });
 
 http.listen(4201, () => {
@@ -362,4 +385,10 @@ async function createRoom(client, data) {
   if (test) return -1;
   const result = await client.db("Projet-Info").collection("Rooms").insertOne(data);
   return 0;
+}
+
+async function filterData(client, {capacity: capacity =20,projector:projector = 0}){
+  const cursor = await client.db("Projet-Info").collection("Rooms").find({capacity:{$gte : capacity},projector:{$gte : projector}});
+  return await cursor.toArray()
+
 }

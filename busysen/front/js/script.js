@@ -1,24 +1,31 @@
-const containerHeight = 720;
-const containerWidth = 600;
-const minutesinDay = 60 * 13;
+let messageWidth = document.getElementById("emploie").offsetWidth;
+let container = document.getElementById("containerPlanning");
+let days = document.getElementById("events");
+console.log("messageWidth: "+messageWidth);
+container.style.width = 0.5*messageWidth+"px";
+days.style.width = 0.5*messageWidth+"px";
+const containerHeight = 400;
+const containerWidth = 0.5*messageWidth;
+const minutesinDay = 60 * 12;
 let collisions = [];
 let width = [];
 let leftOffSet = [];
 
 // append one event to calendar
-var createEvent = (height, top, left, units,login) => {
+var createEvent = (height, top, left, units, login) => {
 
   let node = document.createElement("DIV");
   node.className = "event";
   node.innerHTML = 
-  "<span class='title'> Sample Item </span> \
-  <br><span class='location'> "+  login + " </span>";
+  "<span class='title'> Réservé - </span><span class='location'>"+ login + " </span>";
 
   // Customized CSS to position each event
-  node.style.width = (containerWidth/units) + "px";
+  let leftPosition = document.getElementById("events").getBoundingClientRect().left;
+
+  node.style.width = (0.5*messageWidth) - 90 + "px";
   node.style.height = height + "px";
-  node.style.top = top + "px";
-  node.style.left = 100 + left + "px";
+  node.style.top = top + 81 + "px";
+  node.style.left = leftPosition + "px";
 
   document.getElementById("events").appendChild(node);
 }

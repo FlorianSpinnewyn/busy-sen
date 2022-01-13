@@ -56,6 +56,8 @@ let verif_nb_carre = 0;
 let verifFinal = false;
 let area = document.createElement('area');
 let tab_area = [];
+let attention = "<i class='fa fa-exclamation-triangle' style='color:#f44336;' aria-hidden='true'></i>"
+
 if (imgNew != null && verif == false) {
     document.getElementById("etagenb").addEventListener('submit', (e) => {
         e.preventDefault();
@@ -63,7 +65,8 @@ if (imgNew != null && verif == false) {
         console.log(etage);
         document.getElementById("etagenb").hidden = true;
         document.getElementById("valider").hidden = false;
-
+        document.getElementById("etage2").innerHTML = etage;
+        document.getElementById("selectionSalle").hidden = false;
 
         imgNew.addEventListener('click', (event) => {
             //console.log(event.clientX, event.clientY);
@@ -103,6 +106,7 @@ if (imgNew != null && verif == false) {
                 mh.highlight();
 
                 document.getElementById("form_new").hidden = false;
+                document.getElementById("selectionSalle").hidden = true;
 
                 verif = true;
 
@@ -123,6 +127,7 @@ if (imgNew != null && verif == false) {
                         console.log(levelnew);
                     }
                     document.getElementById("form_new").hidden = true;
+                    document.getElementById("selectionSalle2").hidden = false;
                     document.getElementById('erreur_crea').innerHTML = "";
 
                     verif = false;
@@ -134,7 +139,7 @@ if (imgNew != null && verif == false) {
                 console.log(salles);
                 console.log(tab_area);
                 if (salles.length != verif_nb_carre) {
-                    document.getElementById('erreur_crea').innerHTML = "Vous devez finir de créer la salle avant de valider";
+                    document.getElementById('erreur_crea').innerHTML = attention + "Vous devez finir de créer la salle avant de valider";
                 }
                 else if (salles.length == verif_nb_carre) {
 
@@ -144,7 +149,7 @@ if (imgNew != null && verif == false) {
                         socket.emit('create_etage', salles);
 
                         socket.on('erreur_crea_etage', name => {
-                            document.getElementById('erreur_crea').innerHTML += "\nLe nom de salle : " + name + " est deja utilisé !";
+                            document.getElementById('erreur_crea').innerHTML += "\n" + attention + "Le nom de salle : " + name + " est deja utilisé !";
 
 
 
@@ -159,8 +164,11 @@ if (imgNew != null && verif == false) {
 
                         socket.on('valid', () => {
                             console.log(salles, levelnew);
-                            document.getElementById("popup").hidden = false;
+                            //document.getElementById("popup").hidden = false;
+                            window.alert("L'étage à bien été crée !");
+                            window.location.href='./index';
                             document.getElementsByName("img").disabled = true;
+                            document.getElementById("selectionSalle2").hidden = true;
                         })
                         verifFinal = true;
 
@@ -177,6 +185,6 @@ if (imgNew != null && verif == false) {
 
 document.getElementById("valider").addEventListener('click', () => {
     if (salles.length == 0) {
-        document.getElementById('erreur_crea').innerHTML = "Vous n'avez pas crée de salle";
+        document.getElementById('erreur_crea').innerHTML = attention + "Vous n'avez pas crée de salle";
     }
 });

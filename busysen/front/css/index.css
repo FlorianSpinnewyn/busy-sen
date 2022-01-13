@@ -138,7 +138,7 @@ color: white;
   right:2rem;
 }
 
-.container {
+.containerPlanning {
   margin-top:10px;
   height:400px;
   width: 100%;
@@ -187,6 +187,7 @@ color: white;
   position: absolute;
   font-size: 0.5em;
   box-sizing: border-box;
+  width: 42%;
 }
 
 .event .title {

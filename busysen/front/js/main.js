@@ -21,6 +21,7 @@ document.getElementById("logOut").addEventListener("click", e => {
 
 document.getElementById('cancel').addEventListener("click", event => 
 {
+    document.getElementById('emploie').style.removeProperty("display");
     document.getElementById('emploie').hidden=true;
 });
 
@@ -49,29 +50,68 @@ afficheDate(day)
 
 document.getElementById("levelActu").innerHTML = level;
 
-
-//Affichage des salle dispo
-socket.on("actuPlan2",   (freeRooms) => {
+function settimer(freeRooms) {
+  console.log("les salles libre a ", day ," sont ", freeRooms);
+  console.log(document.getElementById("containerPlanning"))
   for(let i = 0; i<rooms[level+1].length;i++) {
+    console.log(rooms[level+1][i][0]);
     document.getElementById(rooms[level+1][i][0]).style.borderColor ='red' ;
   }
-  console.log("les salles libre a ", day ," sont ", freeRooms);
-  console.log(freeRooms)
   for( let i = 0; i<freeRooms.length;i++) { 
     document.getElementById(freeRooms[i]).style.borderColor ='green' ;
   }
   for(let i = 0; i<rooms[level+1].length;i++) {
     document.getElementById(rooms[level+1][i][0]).style.transform = "rotate( " + rooms[level+1][i][2] + "deg)"
   }
+  console.log("aaaaaaaaaaa")
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+//Affichage des salle dispo
+socket.on("actuPlan2",  (freeRooms) => {
+  sleep(100).then(() => {
+    settimer(freeRooms);
+  });
 });
 
 let tmp;
 
 socket.on("getDataRoom2", (obj, nameRoom) => {
+  // Tente de rendre le planning responsive
+  let messageWidth = document.getElementById("emploie").offsetWidth; 
+  let container = document.getElementById("containerPlanning");
+  let days = document.getElementById("events");
+  console.log("messageWidth: "+messageWidth);
+  container.style.width = 0.5*messageWidth+"px";
+  days.style.width = 0.5*messageWidth - 90 +"px";
+
+  let node = document.getElementsByClassName("event");
+  let leftPosition = document.getElementById("events").getBoundingClientRect().left;
+  console.log("leftpos: "+node.length);
+  for(let i = 0; i < node.length; i++){
+      node[i].setAttribute("id","event"+i);
+      console.log(node[i]);
+      let newNode = document.getElementById("event"+i);
+      console.log(i);
+      console.log(newNode);
+      newNode.style.width = 0.5*messageWidth - 90 +"px";
+      console.log((0.5*messageWidth) - 90 + "px");
+      newNode.style.left = leftPosition + "px";
+  }
+
+  // Met les infos de la salle
   console.log("les reservation de la salle ",nameRoom ," sont ", obj);
   document.getElementById('SelectRoomPlace').innerHTML=obj.capacity;
   document.getElementById('SelectRoomEtage').innerHTML=obj.level;
-  document.getElementById('SelectRoomProj').innerHTML=obj.projector;
+  if(obj.projector==1){
+    document.getElementById('SelectRoomProj').src="../images/projector.png";
+  }
+  else{
+    document.getElementById('SelectRoomProj').src = "../images/noprojector.png";
+  }
   tmp = nameRoom;
   let tabForCalend = [];
   for(let o of obj.reservations) {

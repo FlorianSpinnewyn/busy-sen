@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Busy'sen</title>
+    <title>Création d'une salle</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -12,61 +12,87 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="../css/profil.css">
     <link rel="stylesheet" href="../css/new.css">
-
+    <link rel="icon" type="image/png" href="../pictures/logoSansTexte.png">
     <script type="text/javascript" src="../js/MapHighlight2.js"></script>
 </head>
 
 <body>
-    <div id="forms">
+    <div id="forms" class="w3-card-4 w3-row">
+
         <form method="post" enctype="multipart/form-data" id="img-etage">
-            <div>
-                <label id="text_top" for="image_uploads">Sélectionner un etage uploader (PNG, JPG - 1200px /
-                    836px)</label>
+            <div class="text1">
+                <label id="text_top" for="image_uploads" style="text-align:center;font-size:x-large;letter-spacing: 2px;"><p style="text-align:center;">Sélectionner un etage <span class="choix">uploader</span> (PNG, JPG - 1200px /
+                    836px)</p></label>
                 <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png">
             </div>
+
+          
+            
             <div class="preview">
-                <p>Aucun fichier sélectionné pour le moment</p>
+                <p style="margin-bottom:0;text-align:center;"><i class="fa fa-exclamation-triangle" style="color:#f44336;" aria-hidden="true"></i> Aucun fichier sélectionné pour le moment</p>
             </div>
+        <div class="w3-col s7">
             <img id="newetage" usemap="#image-map">
-
-            <map name="image-map" id="image-map">
-
-            </map>
+            <map name="image-map" id="image-map"></map>
+        </div>
         </form>
 
-        <form id="etagenb">
-            <label id="title">Etage :</label>
-            <input type="number" id="etage">
-            <input type="submit" value="Valider" id="valider_etagenb">
-        </form>
+        <div class="stage w3-col s5" style="text-align:center;">
+            <form id="etagenb">
+                <label id="title">Choisissez un étage : </label>
+                <input type="number" id="etage">
+                <input type="submit" value="Valider" id="valider_etagenb">
+            </form>
+            
+        </div>
 
-        <form id="form_new">
-            <p>Informations sur la salle :</p>
-            <div>
-                <label id="title">Numero de la salle :</label>
-                <input type="text" id="salle">
-                <br>
-                <label id="title">Nombre de personnes :</label>
-                <input type="number" id="prs">
-                <br>
-                <label id="title">Projeteur :</label>
-                <input type="checkbox" id="proj">
+        <div id="selectionSalle" hidden>
+                <p class="select">
+                    Sélectionner une zone pour créer une salle
+                </p>
             </div>
-            <input type="submit" value="Creer" id="valider_etage">
-        </form>
+        <div id="selectionSalle2" hidden>
+            <p class="select">
+                Valider votre action
+            </p>
+        </div>
+        
+        <div class="w3-card-4 w3-col s5">
+            <form id="form_new" style="text-align:center;">
+                <p class="w3-xlarge" style="background-color:#363636;color:white;margin-top:0;padding:0.5rem;">Informations sur la salle :</p>
+                <div class="infoSalle">
+                    <p>Etage: <span id="etage2"></span></p>
+                </div>
+                <div class="infoSalle">
+                    <label id="title">Numero de la salle :</label>
+                    <input type="text" id="salle">
+                </div>
+                <br>
+                <div class="infoSalle">
+                    <label id="title">Nombre de personnes :</label>
+                    <input type="number" id="prs">
+                </div>
+                <br>
+                <div class="infoSalle">
+                    <label id="title">Projeteur :</label>
+                    <input type="checkbox" id="proj">
+                </div>
+                <input type="submit" value="Creer" id="valider_etage">
+            </form>
+        </div>
     </div>
     <div id="buttons">
         <p id="erreur_crea"></p>
         <button id="valider" data-toggle="modal" data-target=".bd-example-modal-lg">Valider</button>
         <button id="return">Annuler</button>
 
-        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        <div class="modal fade bd-example-modal-lg w3-card-4 w3-panel w3-pale-green w3-border" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
             aria-hidden="true" id="popup">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    L'étage à bien été crée !
+                    <p class="stageCreated w3-xlarge">L'étage à bien été crée !</p>
+                    <a href="./index/0" class="returnButton">Retour</a>
                 </div>
-                <a href="./index/0">Retour</a>
             </div>
         </div>
     </div>
