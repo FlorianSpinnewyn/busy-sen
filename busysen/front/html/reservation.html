@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Busy'sen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="../css/reservation.css">
+  <link rel="icon" type="image/png" href="../pictures/logoSansTexte.png">
+</head>
+
+<body>
+
+  <!-- Menu -->
+  <div class="w3-top">
+    <div class="w3-row w3-large">
+      <div class="w3-col s4">
+        <button id="GoHome" class="w3-block btn"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Accueil</button>
+      </div>
+      <div class="w3-col s4">
+        <button id="GoReservation" class="w3-block btn active">Mes Réservations</button>
+      </div>
+      <div class="w3-col s3">
+        <button id="GoNew" class="w3-block btn">Ajouter un étage</button>
+      </div>
+      <div class="w3-col s1 tooltip">
+        <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out btn2"
+            style="text-decoration:none;" aria-hidden="true"></i></button>
+        <span class="tooltiptext w3-small">Déconnexion</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-row-padding" id="about">
+    <div class="w3-center w3-padding-64">
+      <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Mes Réservations</span>
+    </div>
+  </div>
+  <div class="w3-row-padding">
+    <div class="w3-center w3-margin">
+      <table class="w3-card-4" id="tabReservations">
+        <tbody id="tabBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="supprReservation" class="fenetre" hidden>
+    <div class="w3-card-4 w3-margin-bottom " style="background-color:#ffffff;">
+      <div style="float:right;">
+        <button id="cancel" name="cancel" style="background-color:#363636;color:white;margin:0;"><i
+            class="fa fa-remove"></i></button>
+      </div>
+      <div classe="w3-card-4">
+        <p style="padding-top:2rem;">Etes-vous sûr de vouloir supprimer une réservation ?</p>
+        <button type="submit" style="margin-left:46rem;margin-bottom:1rem;" class="supp-reserve"
+          id="validation">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  let socket = io();
+
+  socket.emit('isAdmin');
+  socket.on('no-admin', () => {
+    document.getElementById('GoNew').disabled = true;
+  });
+</script>
+<script src="../js/modules/logger.js"></script>
+<script src="../js/reservation.js"></script>
+
+</html>

@@ -1,0 +1,13 @@
+.occuped {
+		border:solid 3px red;
+}
+
+a { 
+	pointer-events: none; 
+	cursor: default; 
+	}
+
+footer a { 
+		pointer-events: all; 
+		cursor: default; 
+		}

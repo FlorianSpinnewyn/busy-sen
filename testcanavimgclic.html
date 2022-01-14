@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Busy'sen</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="MapHighlight.js"></script>
+
+</head>
+
+<body id='body'>
+    <form method="post" enctype="multipart/form-data">
+        <div>
+            <label for="image_uploads">Sélectionner un etage uploader (PNG, JPG)</label>
+            <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png">
+        </div>
+        <div class="preview">
+            <p>Aucun fichier sélectionné pour le moment</p>
+        </div>
+        <img id="newetage" usemap="#image-map">
+
+        <map name="image-map">
+
+        </map>
+</body>
+
+<script src="zone.js"></script>
+<script>
+    let body = document.getElementById('body');
+    body.addEventListener('click', () => {
+        console.log(event.clientX, event.clientY);
+    })
+</script>
+
+</html>

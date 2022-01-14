@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="./css/login.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="icon" type="image/png" href="../pictures/logoSansTexte.png">
+    <title>Busy'Sen</title>
+</head>
+
+<body>
+    <img src="../pictures/logoTest.png" alt="Logo">
+
+    <div class="header">
+    <h1>Bienvenue sur Busy'Sen</h1>
+    <h2>Connexion</h2>
+    </div>
+   
+  
+<form id="loginForm">
+    <input type="text" id="username" placeholder="Email"/>
+    <input type="password" id="mp" placeholder="Mot de passe" />
+    <input type="submit" value="Connexion" /><br>
+  <a href="/register">Inscrivez-vous ici !</a>
+</form>
+<p id="erreur"></p>
+
+</body>
+<script>
+    let socket = io();
+</script>
+<script src="../js/modules/logger.js"></script>
+<script src="../js/login.js"></script>
+
+
+</html>

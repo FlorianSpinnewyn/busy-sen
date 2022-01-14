@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Busy'sen</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
+<body>
+  <!-- Menu -->
+  <div class="w3-top">
+    <div class="w3-row w3-large">
+      <div class="w3-col s4">
+        <button class="w3-block btn active"><i class="fa fa-home fa-lg" aria-hidden="true"></i> Accueil</button>
+      </div>
+      <div class="w3-col s4">
+        <button id="GoReservation" class="w3-block btn">Mes Réservations</button>
+      </div>
+      <div class="w3-col s3">
+        <button id="GoNew" class="w3-block btn">Ajouter un étage</button>
+      </div>
+      <div class="w3-col s1 tooltip">
+        <button id="logOut" class="w3-block btn" style="float:right;"><i class="fa fa-sign-out btn2"
+            style="text-decoration:none;" aria-hidden="true"></i></button>
+        <span class="tooltiptext w3-small">Déconnexion</span>
+      </div>
+    </div>
+  </div>
+  <div class="w3-row-padding" id="about">
+
+      <div class="w3-card-4 w3-margin-bottom w3-col s6 " id="divFiltrer">
+        <ul class="w3-ul w3-border w3-center">
+          <li class="w3-xlarge" style="background-color:#363636"><p style="color:white">Recherche</p></li>
+          <label for="dateFiltre">Date de réservation:</label>
+          <input type="date" id="dateFiltre" name="date"
+                 min="2021-09-01" max="2022-09-01" required/><br>
+
+          <label for="timeFiltre">Heure de réservation:</label>
+          <input type="time" id="timeFiltre" name="time"
+                 min="08:00" max="20:00"/><br>
+
+          <label for="capacity">Capacité :</label>
+          <input type="number" id="capacity" name="capacity"
+                 min="1" max="150"><br>
+
+
+          <i class="material-icons" style="font-size:36px">videocam</i>
+          <label class="container">Vidéo Projecteur
+            <input type="checkbox" id="vid">
+            <span class="checkmark"></span>
+          </label><br>
+
+          <input id="buttonSearch" type="submit" value="Rechercher" /><br>
+        </ul>
+      
+      </div>
+
+      <div id="liste"></div>
+  </div>
+
+  </div>
+
+
+  <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+    <div class="w3-container">
+      <div class="w3-display-container mySlides" id="plan"></div>
+    </div>
+
+    <div class="niveau">
+      <button id="niveauPlus" class="fa fa-arrow-up"></button> <br>
+      <p>Niveau <span id="levelActu">0</span></p>
+      <button id="niveauMoins" class="fa fa-arrow-down"></button>
+    </div>
+
+    <!-- Slide bar -->
+    <br><br><br>
+    <div class="slidecontainer">
+      <input type="range" min="8" max="22" value="8" class="slider" id="myRange">
+      <p>Heure: <span id="demo"></span></p>
+    </div>
+
+    <!-- Date -->
+    <div class="w3-bar w3-border">
+      <button id="dateMoins" class="w3-button w3-border-right w3-hover-red" disabled>&#10094;</button>
+      <span id="today" style="margin-left:28.5rem;"></span>
+      <button id="datePlus" class="w3-button w3-border-left w3-right w3-hover-red">&#10095;</button>
+    </div>
+
+    <script>
+      var slider = document.getElementById("myRange");
+      var output = document.getElementById("demo");
+      output.innerHTML = slider.value + "h";
+
+    </script>
+
+  </div>
+
+  <div id="emploie" class="fenetre" hidden>
+    <div class="w3-card-4 w3-margin-bottom " style="background-color:#ffffff;">
+      <div style="float:right;">
+        <button id="cancel" name="cancel" style="background-color:#363636;color:white;margin:0;"><i
+            class="fa fa-remove"></i></button>
+      </div>
+      <div classe="w3-card-4">
+        <h1 id="SelectRoom" style="background-color:#363636;color:white;margin:0;padding:0.2rem;"></h1>
+        <div class="containerPlanning" id="containerPlanning">
+          <div class="timings">
+            <div> <span> 8:00 </span></div>
+            <div> 8:30 </div>
+            <div> <span> 9:00 </span></div>
+            <div> 9:30 </div>
+            <div> <span> 10:00 </span></div>
+            <div> 10:30 </div>
+            <div> <span> 11:00 </span></div>
+            <div> 11:30 </div>
+            <div> <span> 12:00 </span></div>
+            <div> 12:30 </div>
+            <div> <span> 13:00 </span></div>
+            <div> 13:30 </div>
+            <div> <span> 14:00 </span></div>
+            <div> 14:30 </div>
+            <div> <span> 15:00 </span></div>
+            <div> 15:30 </div>
+            <div> <span> 16:00 </span></div>
+            <div> 16:30 </div>
+            <div> <span> 17:00 </span></div>
+            <div> 17:30 </div>
+            <div> <span> 18:00 </span></div>
+            <div> 18:30 </div>
+            <div> <span> 19:00 </span></div>
+            <div> 19:30 </div>
+            <div> <span> 20:00 </span></div>
+          </div>
+        
+        
+          <div class="days" id="events">
+          </div>
+        
+        </div>
+
+        <!-- //////////////////////////////////////////////////////////////////////////////////-->
+
+        <p>Nombre de place : <span id="SelectRoomPlace"></span></p>
+        <p>etage : <span id="SelectRoomEtage"></span></p>
+        <p>Projecteur : <span id="SelectRoomProj"></span></p>
+        
+
+          <p>A quelle heure voulez-vous reserver?
+            de <input type="time" id="debut" name="appt" min="08:00" max="20:00" required> à
+            <input type="time" id="fin" name="appt" min="08:00" max="20:00" required>
+          </p>
+          <button style="margin-left:64rem;margin-bottom:1rem;" id="buttonReservation">Reserver</button>
+
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="w3-container w3-light-grey w3-center">
+    <div class="w3-xlarge w3-section">
+      <img src="../images/juniaIsen.png">
+    </div>
+</footer>
+
+</body>
+
+<script>
+  let socket = io();
+
+  socket.emit('isAdmin');
+  socket.on('no-admin',()=>{
+    document.getElementById('GoNew').disabled=true;
+  })
+</script>
+<script src="../js/form.js"></script>
+<script src="../js/script.js"></script>
+<script src="../js/MapHighlight.js"></script>
+<script src="../js/rooms.js"></script>
+<script src="../js/functions.js"></script>
+<script src="../js/main.js"></script>
+
+</html>
