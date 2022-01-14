@@ -80,7 +80,7 @@ if (imgNew != null && verif == false) {
     fetch("http://localhost:4202/levels/max", requestOptions)
         .then(response => response.text())
         .then(result => {
-            etage = result;
+            etage = parseInt(result);
         document.getElementById("valider").hidden = false;
         document.getElementById("etage2").innerHTML = etage;
 

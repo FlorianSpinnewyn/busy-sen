@@ -194,6 +194,7 @@ app.post("/rooms/:id/reservations", async function (req, res) {
   const room = req.params.id;
   const date1 = parseInt(req.query.date1)
   const date2 = parseInt(req.query.date2)
+    
   await newReservation(client,{
     name : room,
     reservations : {
@@ -372,7 +373,11 @@ async function getLevelData(client, level, date){
 
 async function getDataUser(client,idClient){
   const cursor = await client.db("Projet-Info").collection("Rooms").find({'reservations.idClient': idClient});
-  return await cursor.toArray();
+  const arrayRoom = await cursor.toArray();
+  if(arrayRoom.isEmpty) return -1;
+
+  arrayRoom.forEach(obj=>obj.reservations = obj.reservations.filter(e=>e.idClient==idClient));
+  return arrayRoom
 }
 
 async function getDataRoom(client, roomNumber){

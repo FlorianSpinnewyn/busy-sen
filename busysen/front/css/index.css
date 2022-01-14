@@ -196,8 +196,9 @@ color: white;
 }
 
 #divFiltrer{
-  margin-left:25%;
+  width:50%;
   margin-top: 7%;
+  margin-left:20rem;
 }
 
 #dateFiltre,#timeFiltre,#capacity{
@@ -219,4 +220,17 @@ color: white;
 
 #buttonSearch:hover{
   background-color: rgb(187, 180, 180);
+}
+
+#liste{
+  margin-top:7%;
+  padding:2rem;
+  color:red;
+  margin-top:10%;
+  font-weight: bold;
+  font-size: smaller;
+  margin-left: 1rem;
+  position:absolute;
+  z-index:10;
+  margin-left:75%;
 }

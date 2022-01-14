@@ -22,6 +22,7 @@ function addPlan(level) { //ajout du plan et init des salle sur index
         for (let i = 0; i < rooms[level].length; i++) {
             var sheet = window.document.styleSheets[3];
             sheet.insertRule('#' + rooms[level][i][0] + ' { transform: rotate( ' + rooms[level][i][2] + 'deg); }', sheet.cssRules.length);
+            
             document.getElementById("A" + rooms[level][i][0]).addEventListener("click", e => {
                 document.getElementById('emploie').hidden = false;
                 document.getElementById('SelectRoom').innerHTML = rooms[level][i][0];
@@ -35,6 +36,10 @@ function addPlan(level) { //ajout du plan et init des salle sur index
                     .then(response => response.json())
                     .then(obj => {
                         // Tente de rendre le planning responsive
+                        
+                        document.getElementById('buttonReservation').style.display = "block";
+                        if(obj.admin  && !admin){document.getElementById('buttonReservation').style.display = "none";}
+
                         let messageWidth = document.getElementById("emploie").offsetWidth;
                         let container = document.getElementById("containerPlanning");
                         let days = document.getElementById("events");
@@ -97,7 +102,7 @@ function addPlan(level) { //ajout du plan et init des salle sur index
             .then(result => {
                 let data = result.level
                 console.log(data);
-
+                console.log(result);
                 const img = new Image();
                 // change image type to whatever you use, or detect it in the backend
                 // and send it if you support multiple extensions

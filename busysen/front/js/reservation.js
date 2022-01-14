@@ -95,7 +95,7 @@ fetch("http://localhost:4202/reservations", requestOptions)
     .then(response => response.json())
     .then(result => {
         tabReservationsUser = result;
-        //console.log(data);
+        console.log(tabReservationsUser);
         let count = 0;
         for (let i = 0; i < tabReservationsUser.length; i++) {
             for (let j = 0; j < tabReservationsUser[i].reservations.length; j++) {

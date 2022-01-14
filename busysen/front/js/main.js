@@ -6,6 +6,10 @@ document.getElementById("GoNew").addEventListener("click", e => {
   e.preventDefault();
   window.location.href = "/new";
 });
+document.getElementById("GoHome").addEventListener("click", e => {
+  e.preventDefault();
+  window.location.href = "/index/0";
+});
 
 document.getElementById("GoReservation").addEventListener("click", event => {
   socket.emit("Redirection","/reservation", false);
@@ -56,7 +60,7 @@ sleep(100).then(() => {
   fetch("http://localhost:4202/levels?level="+level+"&date="+day.getTime(), requestOptions)
       .then(response => response.json())
       .then(result =>{
-        sleep(500).then(() => {
+        sleep(1000).then(() => {
           settimer(result);
         });
       })
@@ -91,6 +95,7 @@ afficheDate(day)
 document.getElementById("levelActu").innerHTML = level;
 
 function settimer(freeRooms) {
+  try{
   if(level > 6) {level = 7}
   console.log("les salles libre a ", day ," sont ", freeRooms);
   console.log(document.getElementById("containerPlanning"));
@@ -98,14 +103,18 @@ function settimer(freeRooms) {
   for(let i = 0; i<rooms[level].length;i++) {
     console.log(rooms[level][i][0]);
     document.getElementById(rooms[level][i][0]).style.borderColor ='red' ;
+    document.getElementById(rooms[level][i][0]).style.background = '#ec8e8849';
   }
   for( let i = 0; i<freeRooms.length;i++) {
     document.getElementById(freeRooms[i]).style.borderColor ='green' ;
+    document.getElementById(freeRooms[i]).style.background ='#89ee9f4d';
   }
   for(let i = 0; i<rooms[level].length;i++) {
     document.getElementById(rooms[level][i][0]).style.transform = "rotate( " + rooms[level][i][2] + "deg)"
   }
+  } catch(e){}
 }
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -144,7 +153,7 @@ document.getElementById('datePlus').addEventListener("click", event => {
   fetch("http://localhost:4202/levels/?level="+level+"&date="+day.getTime(), requestOptions)
       .then(response => response.json())
       .then(result => {
-        sleep(100).then(() => {
+        sleep(500).then(() => {
           settimer(result);
         });
       })
@@ -226,32 +235,49 @@ let heureFin = document.getElementById('fin');
 
 document.getElementById('buttonReservation').addEventListener("click", event => {
   event.preventDefault();
+  if(obj.admin  && !admin){this.target.hidden =true;}
+  this.target.hidden =false;
   let firstDateReservee = new Date(+day);
-  let secondDateReservee = new Date(+firstDateReservee);
-  firstDateReservee.setHours(heuredebut.value[0] + heuredebut.value[1])
-  firstDateReservee.setMinutes(heuredebut.value[3] + heuredebut.value[4])
-  secondDateReservee.setHours(heureFin.value[0] + heureFin.value[1])
-  secondDateReservee.setMinutes(heureFin.value[3] + heureFin.value[4])
-  console.log(heuredebut.value,heureFin.value)
-  console.log(firstDateReservee,secondDateReservee,day)
-  secondDateReservee.setSeconds(0);
-  secondDateReservee.setMilliseconds(0);
-  firstDateReservee.setSeconds(0);
-  firstDateReservee.setMilliseconds(0);
-  if(secondDateReservee > firstDateReservee){
-    var requestOptions = {
-      method: 'POST',
-      redirect: 'follow'
-    };
-
-    fetch("http://localhost:4202/rooms/"+tmp+"/reservations?date1="+firstDateReservee.getTime()+"&date2="+secondDateReservee.getTime(), requestOptions)
-        .then(response => response.json())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
-    window.location.href='/index/' + level;
+  if (firstDateReservee.getDay() == 0) {
+    firstDateReservee.setDate(firstDateReservee.getDate() - 1);
   }
-  else
-    console.log('erreur');
+  let secondDateReservee = new Date(+firstDateReservee);
+  firstDateReservee.setHours(heuredebut.value[0] + heuredebut.value[1]);
+  firstDateReservee.setMinutes(heuredebut.value[3] + heuredebut.value[4]);
+  secondDateReservee.setHours(heureFin.value[0] + heureFin.value[1]);
+  secondDateReservee.setMinutes(heureFin.value[3] + heureFin.value[4]);
+  console.log(heuredebut.value, heureFin.value)
+  console.log(firstDateReservee, secondDateReservee, day)
+  if (firstDateReservee.getHours(heuredebut.value[0] + heuredebut.value[1]) > 7 && ((secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) < 20) || (secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) == 20 && secondDateReservee.getMinutes(heureFin.value[3] + heureFin.value[4]) == 0))) {
+    console.log("jour " + firstDateReservee.getDay())
+    if (firstDateReservee.getDay() != 6 || (firstDateReservee.getDay() == 6 && ((secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) < 12) || (secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) == 12 && secondDateReservee.getMinutes(heureFin.value[3] + heureFin.value[4]) == 0)))) {
+      secondDateReservee.setSeconds(0);
+      secondDateReservee.setMilliseconds(0);
+      firstDateReservee.setSeconds(0);
+      firstDateReservee.setMilliseconds(0);
+      if (secondDateReservee > firstDateReservee) {
+        var requestOptions = {
+          method: 'POST',
+          redirect: 'follow'
+        };
+    
+        fetch("http://localhost:4202/rooms/"+tmp+"/reservations?date1="+firstDateReservee.getTime()+"&date2="+secondDateReservee.getTime(), requestOptions)
+            .then(response => response.json())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        window.location.href='/index/' + level;
+      }
+      else alert("L'heure de début doit être inférieure à l'heure de fin.");
+    }
+    else {
+      alert("La réservation doit être comprise entre 8h00 et 12h00.");
+    }
+  }
+  else {
+    if (firstDateReservee.getDay() != 6) {
+      alert("La réservation doit être comprise entre 8h00 et 20h00.");
+    } else alert("La réservation doit être comprise entre 8h00 et 12h00.");
+  }
 });
 
 function displayDate(tabForCalend){
