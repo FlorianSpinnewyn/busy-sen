@@ -1,6 +1,8 @@
 // Avertis socket io de l'arrivée dans le chat d'un user
 socket.emit('login', '');
 
+let tabTmp = []
+
 // Redirection
 document.getElementById("GoNew").addEventListener("click", e => {
   e.preventDefault();
@@ -251,21 +253,27 @@ document.getElementById('buttonReservation').addEventListener("click", event => 
   if (firstDateReservee.getHours(heuredebut.value[0] + heuredebut.value[1]) > 7 && ((secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) < 20) || (secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) == 20 && secondDateReservee.getMinutes(heureFin.value[3] + heureFin.value[4]) == 0))) {
     console.log("jour " + firstDateReservee.getDay())
     if (firstDateReservee.getDay() != 6 || (firstDateReservee.getDay() == 6 && ((secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) < 12) || (secondDateReservee.getHours(heureFin.value[0] + heureFin.value[1]) == 12 && secondDateReservee.getMinutes(heureFin.value[3] + heureFin.value[4]) == 0)))) {
-      secondDateReservee.setSeconds(0);
-      secondDateReservee.setMilliseconds(0);
-      firstDateReservee.setSeconds(0);
-      firstDateReservee.setMilliseconds(0);
-      if (secondDateReservee > firstDateReservee) {
-        var requestOptions = {
-          method: 'POST',
-          redirect: 'follow'
-        };
-    
-        fetch("http://localhost:4202/rooms/"+tmp+"/reservations?date1="+firstDateReservee.getTime()+"&date2="+secondDateReservee.getTime(), requestOptions)
-            .then(response => response.json())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
-        window.location.href='/index/' + level;
+      console.log(ReserveOnReserve(tabTmp, firstDateReservee.getTime(), secondDateReservee.getTime()));
+      if(ReserveOnReserve(tabTmp, firstDateReservee.getTime(), secondDateReservee.getTime())){
+        secondDateReservee.setSeconds(0);
+        secondDateReservee.setMilliseconds(0);
+        firstDateReservee.setSeconds(0);
+        firstDateReservee.setMilliseconds(0);
+        if (secondDateReservee > firstDateReservee) {
+          var requestOptions = {
+            method: 'POST',
+            redirect: 'follow'
+          };
+      
+          fetch("http://localhost:4202/rooms/"+tmp+"/reservations?date1="+firstDateReservee.getTime()+"&date2="+secondDateReservee.getTime(), requestOptions)
+              .then(response => response.json())
+              .then(result => console.log(result))
+              .catch(error => console.log('error', error));
+          window.location.href='/index/' + level;
+      }
+      else {
+        alert("La salle est déja reservée.");
+      }
       }
       else alert("L'heure de début doit être inférieure à l'heure de fin.");
     }
@@ -303,3 +311,18 @@ function displayDate(tabForCalend){
 
 
 
+function ReserveOnReserve(tabTmp, debut, fin) {
+  console.log(tabTmp);
+  for (let i = 0; i < tabTmp.length; i++) {
+    if ((debut >= tabTmp[i].start) && (debut <= tabTmp[i].end)) {
+      return 0;
+    }
+    else if ((fin >= tabTmp[i].start) && (fin <= tabTmp[i].end)) {
+      return 0;
+    }
+    else if ((debut <= tabTmp[i].start) && (fin >= tabTmp[i].end)) {
+      return 0;
+    }
+  }
+  return 1;
+}

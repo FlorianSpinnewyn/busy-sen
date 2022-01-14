@@ -84,6 +84,7 @@ function addPlan(level) { //ajout du plan et init des salle sur index
                             }
                         }
                         displayDate(tabForCalend)
+                        tabTmp = tabForCalend;
                     })
                     .catch(error => console.log('error', error));
             });
