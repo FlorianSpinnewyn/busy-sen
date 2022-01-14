@@ -235,8 +235,8 @@ let heureFin = document.getElementById('fin');
 
 document.getElementById('buttonReservation').addEventListener("click", event => {
   event.preventDefault();
-  if(obj.admin  && !admin){this.target.hidden =true;}
-  this.target.hidden =false;
+  //if(obj.admin  && !admin){this.target.hidden =true;}
+  //this.target.hidden =false;
   let firstDateReservee = new Date(+day);
   if (firstDateReservee.getDay() == 0) {
     firstDateReservee.setDate(firstDateReservee.getDate() - 1);
